@@ -71,7 +71,7 @@ const Header = () => {
                                     height={10}
                                     className="hidden w-full dark:block"
                                 />
-                                <h1 className="lg:text-xl lg:block hidden text-gray-950 dark:text-white">Construcciones Menores</h1>
+                                <h1 className="lg:text-xl text-base lg:block hidden text-gray-950  dark:text-white">Construcciones Menores</h1>
                             </Link>
                         </div>
                     </div>
