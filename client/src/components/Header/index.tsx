@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import Logo from '../../../public/images/logo/logo.svg';
+import Logo2 from '../../../public/images/logo/logo.png';
 import ThemeToggler from "./ThemeToggler";
 import menuData from "./menuData";
 
@@ -53,16 +54,24 @@ const Header = () => {
                         <div className="w-28 max-w-full px-4 xl:mr-12">
                             <Link
                                 href="/"
-                                className={`header-logo block w-full ${sticky ? "py-5 lg:py-2" : "py-8"
+                                className={`header-logo  w-full flex flex-row items-center ${sticky ? "py-5 lg:py-2" : "py-8"
                                     } `}
                             >
+                                <Image
+                                    src={Logo2}
+                                    alt='logo'
+                                    width={60}
+                                    height={30}
+                                    className="w-full dark:hidden pl-1"
+                                />
                                 <Image
                                     src={Logo}
                                     alt='logo'
                                     width={30}
                                     height={10}
-                                    className="w-full dark:block"
+                                    className="hidden w-full dark:block"
                                 />
+                                <h1 className="lg:text-xl lg:block hidden text-white">Construcciones Menores</h1>
                             </Link>
                         </div>
                     </div>
@@ -103,8 +112,8 @@ const Header = () => {
                                             <Link
                                                 href={menuItem.path}
                                                 className={`flex py-2 text-base lg:mr-0 lg:inline-flex lg:px-0 lg:py-6 ${usePathName === menuItem.path
-                                                    ? " dark:text-white/70 text-white/70 dark:hover:text-amber-300 hover:text-amber-300"
-                                                    : " dark:text-white/70 text-white/70 dark:hover:text-amber-300 hover:text-amber-300"
+                                                    ? "text-primary dark:text-white"
+                                                    : "text-dark hover:text-primary dark:text-white/70 dark:hover:text-white"
                                                     }`}
                                             >
                                                 {menuItem.title}
@@ -138,15 +147,15 @@ const Header = () => {
                     <div className="flex items-center justify-end pr-16 lg:pr-0">
                         <Link
                             href="/signin"
-                            className="hidden px-7 py-3 text-base font-medium  dark:text-white/70 text-white/70 dark:hover:text-amber-300 hover:text-amber-300 md:block"
+                            className="hidden px-7 py-3 text-base font-medium text-dark hover:opacity-70 dark:text-white md:block"
                         >
-                            Iniciar sesion
+                            Iniciar sesión
                         </Link>
                         <Link
                             href="/signup"
-                            className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-0 py-2 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-6 xl:px-9"
+                            className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-sm bg-primary px-0 py-2 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-3 xl:px-3"
                         >
-                            Únetenos
+                            Registrarce
                         </Link>
                         <div>
                             <ThemeToggler />
