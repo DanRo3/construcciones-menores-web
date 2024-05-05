@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import Presentation from './../components/Presentation/index';
 
 export const metadata: Metadata = {
-  title: "Home | Construcciones Menores",
-  description: "This is Home for Startup Nextjs Template",
+  title: "Inicio | Construcciones Menores",
+  description: "Pagina de inicio de Construcciones Menores",
 };
 
 export default function Home() {
