@@ -16,7 +16,6 @@ const ContactPage = () => {
         pageName="Página de contacto"
         description="Página para establecer un contacto con la empresa"
       />
-
       <Contact />
     </>
   )
