@@ -4,6 +4,7 @@ import Link from "next/link";
 import Logo from '../../../public/images/logo/logo.svg';
 import Logo2 from '../../../public/images/logo/logo.png';
 import DecoratorsFooters from "../Decorators/index2";
+import { PhoneOutlined } from "@ant-design/icons";
 
 const Footer = () => {
     return (
@@ -142,6 +143,76 @@ const Footer = () => {
                                             className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                                         >
                                             Productos
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-2/12 xl:w-2/12">
+                            <div className="mb-12 lg:mb-16">
+                                <h2 className="mb-10 text-xl font-bold text-black dark:text-white">
+                                Legal
+                                </h2>
+                                <ul>
+                                    <li>
+                                        <Link
+                                        href="/"
+                                        className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                                        >
+                                            Política de privacidad
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                        href="/"
+                                        className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                                        >
+                                            Términos legales
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                        href="/"
+                                        className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                                        >
+                                            Política de reembolso
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-3/12">
+                            <div className="mb-12 lg:mb-16">
+                                <h2 className="mb-10 text-xl font-bold text-black dark:text-white">
+                                    Soporte y contacto
+                                </h2>
+                                <ul>
+                                    <li>
+                                        <Link
+                                        href="/"
+                                        className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                                        >
+                                            {/* Falta icono */}
+                                           Carretera a San Antonio km 2 1/2. Torrens. Boyeros. La Habana. Cuba. 
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                        href="/"
+                                        className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                                        >
+                                            <PhoneOutlined /> +53 7889 9988
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                        href="/about"
+                                        className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                                        >   
+                                            {/* Falta icono */}
+                                            constmenores@gmail.com
                                         </Link>
                                     </li>
                                 </ul>
