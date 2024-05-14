@@ -4,7 +4,7 @@ import Link from "next/link";
 import Logo from '../../../public/images/logo/logo.svg';
 import Logo2 from '../../../public/images/logo/logo.png';
 import DecoratorsFooters from "../Decorators/index2";
-import { PhoneOutlined } from "@ant-design/icons";
+import { EnvironmentOutlined, InboxOutlined, PhoneOutlined } from "@ant-design/icons";
 
 const Footer = () => {
     return (
@@ -191,11 +191,12 @@ const Footer = () => {
                                 <ul>
                                     <li>
                                         <Link
-                                        href="/"
+                                        href="https://maps.app.goo.gl/FVKavf3CABMxvjHc7"
+                                        target="_blank"
                                         className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                                         >
                                             {/* Falta icono */}
-                                           Carretera a San Antonio km 2 1/2. Torrens. Boyeros. La Habana. Cuba. 
+                                            <EnvironmentOutlined /> Calle 100 # 3134 % 31 y 33 Marianao C.Habana, 3134 100, La Habana
                                         </Link>
                                     </li>
                                     <li>
@@ -212,7 +213,7 @@ const Footer = () => {
                                         className="mb-4 inline-block text-base text-body-color duration-300 hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
                                         >   
                                             {/* Falta icono */}
-                                            constmenores@gmail.com
+                                            <InboxOutlined /> constmenores@gmail.com
                                         </Link>
                                     </li>
                                 </ul>

@@ -1,3 +1,5 @@
+import Breadcrumb from "@/components/Common/Breadcrumb";
+import Servicios from "@/components/Servicios";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +11,11 @@ export const metadata: Metadata = {
 const ServicesPage = () => {
   return (
     <div>
-      
+      <Breadcrumb
+        pageName="Página de servicios"
+        description="Página para dar a conocer los servicios de la empresa"
+      />
+      <Servicios />
     </div>
   )
 }
