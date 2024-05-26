@@ -28,6 +28,7 @@ const Header = () => {
             setSticky(false);
         }
     };
+    
     useEffect(() => {
         window.addEventListener("scroll", handleStickyNavbar);
     });
