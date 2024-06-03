@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import Presentation from './../components/Presentation/index';
-import Presentation2 from "@/components/Presentation/index2";
-
+import Mision from "@/components/Mision";
 
 export const metadata: Metadata = {
   title: "Inicio | Construcciones Menores",
@@ -9,9 +8,11 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
+  
   return (
     <>
-      <Presentation/>
+      <Presentation />
+      <Mision />
     </>
   );
 }

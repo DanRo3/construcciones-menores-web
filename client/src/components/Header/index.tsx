@@ -158,7 +158,7 @@ const Header = () => {
                             href="/signup"
                             className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-full bg-primary px-0 py-2 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-3 xl:px-3"
                         >
-                            Registrarce
+                            Registrarse
                         </Link>
                         <div>
                             <ThemeToggler />
