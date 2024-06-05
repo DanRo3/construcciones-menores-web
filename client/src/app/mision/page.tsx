@@ -1,3 +1,5 @@
+import Breadcrumb from "@/components/Common/Breadcrumb";
+import Mision from "@/components/Mision";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,9 +9,13 @@ export const metadata: Metadata = {
 };
 const MisionPage = () => {
   return (
-    <div>
-      
-    </div>
+    <>
+      <Breadcrumb
+        pageName="Mision y vision"
+        description="Conoce nuestros principios como empresa"
+      />
+      <Mision />
+    </>
   )
 }
 
