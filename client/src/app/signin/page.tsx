@@ -1,14 +1,39 @@
-
 import Link from "next/link";
 import { Metadata } from "next";
+import { useState } from "react";
 
 export const metadata: Metadata = {
     title: "Iniciar sesión | Construcciones Menores",
     description: "Esta es la página de inicio de sesion de la empresa Construcciones Menores",
     // other metadata
 };
+interface FormState {
+    email?: string;
+    pass?: string;
+  }
+
+
 
 const SigninPage = () => {
+    // const {credentials, setCredentials} = useState({
+    //     email:"",
+    //     password:"",
+    // })
+
+    // const {email, password } = credentials
+
+    // const handleChange = (e)=>{
+    //     setCredentials({
+    //         ...credentials,
+    //         [e.target.name] : [e.target.value]
+    //     })
+    // }
+    
+    // const handleSignin = (e)=>{
+    //     e.preventDefault();
+    //     console.log(credentials);
+    // }
+    
     return (
         <>
             <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
@@ -29,7 +54,7 @@ const SigninPage = () => {
                                     </p>
                                     <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
                                 </div>
-                                <form>
+                                <form onSubmit={handleSignin}>
                                     <div className="mb-8">
                                         <label
                                             htmlFor="email"
@@ -41,6 +66,8 @@ const SigninPage = () => {
                                             type="email"
                                             name="email"
                                             required
+                                            value={email}
+                                            onChange={handleChange}
                                             placeholder="Introduce tu correo"
                                             className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                                         />
@@ -55,6 +82,8 @@ const SigninPage = () => {
                                         <input
                                             type="password"
                                             name="password"
+                                            value={password}
+                                            onChange={handleChange}
                                             required
                                             placeholder="Introduce tu contraseña"
                                             className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
