@@ -6,28 +6,30 @@ interface MisionProps {}
 
 const Mision: React.FC<MisionProps> = () => {
   return (
-    <section id="mision">
-      <TextParallaxContent
-        imgUrl="https://cdn.pixabay.com/photo/2024/05/14/05/38/builder-8760328_640.jpg"
-        subheading="Nuestros valores"
-        heading="Buscan un cliente satisfecho"
-      >
-        <ContentOne />
-      </TextParallaxContent>
-      <TextParallaxContent
-        imgUrl="https://cdn.pixabay.com/photo/2017/07/09/03/19/home-2486092_640.jpg"
-        subheading="Calidad"
-        heading="A la mano de la comunicación"
-      >
-        <ContentTwo />
-      </TextParallaxContent>
-      <TextParallaxContent
-        imgUrl="https://cdn.pixabay.com/photo/2020/09/18/21/53/architecture-5583025_1280.jpg"
-        subheading="Nuestra Visión"
-        heading="Construir el futuro junto a ti"
-      >
-        <ContentTree />
-      </TextParallaxContent>
+    <section id="mision" className="">
+      <div className="">
+        <TextParallaxContent
+          imgUrl="https://cdn.pixabay.com/photo/2024/05/14/05/38/builder-8760328_640.jpg"
+          subheading="Nuestros valores"
+          heading="Buscan un cliente satisfecho"
+        >
+          <ContentOne />
+        </TextParallaxContent>
+        <TextParallaxContent
+          imgUrl="https://cdn.pixabay.com/photo/2017/07/09/03/19/home-2486092_640.jpg"
+          subheading="Calidad"
+          heading="A la mano de la comunicación"
+        >
+          <ContentTwo />
+        </TextParallaxContent>
+        <TextParallaxContent
+          imgUrl="https://cdn.pixabay.com/photo/2020/09/18/21/53/architecture-5583025_1280.jpg"
+          subheading="Nuestra Visión"
+          heading="Construir el futuro junto a ti"
+        >
+          <ContentTree />
+        </TextParallaxContent>
+      </div>
     </section>
   );
 };

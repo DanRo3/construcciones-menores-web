@@ -96,7 +96,7 @@ const Card: React.FC<CardProps> = ({ card }) => {
 const Servicios: React.FC = () => {
   return (
     <div>
-      <div className="flex h-48 items-center justify-center">
+      <div className="flex w-full text-center items-center justify-center">
         <span className="font-semibold text-5xl">
           Nuestros servicios
         </span>

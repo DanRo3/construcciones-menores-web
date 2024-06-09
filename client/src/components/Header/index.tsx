@@ -55,7 +55,7 @@ const Header = () => {
                     <div className='relative -mx-4 flex items-center justify-between'>
                         <div className="w-28 max-w-full px-4 xl:mr-12">
                             <Link
-                                href="/"
+                                href="/home"
                                 className={`header-logo  w-full flex flex-row items-center ${sticky ? "py-5 lg:py-2" : "py-8"
                                     } `}
                             >
@@ -149,13 +149,13 @@ const Header = () => {
                     <div className="flex items-center justify-end pr-16 lg:pr-0">
                         
                         <Link
-                            href="/signin"
+                            href="/home/signin"
                             className="hidden px-7 py-3 text-2xl font-medium text-dark hover:opacity-70 dark:text-white md:block"
                         >
                             <UserOutlined />
                         </Link>
                         <Link
-                            href="/signup"
+                            href="/home/signup"
                             className="ease-in-up shadow-btn hover:shadow-btn-hover hidden rounded-full bg-primary px-0 py-2 text-base font-medium text-white transition duration-300 hover:bg-opacity-90 md:block md:px-9 lg:px-3 xl:px-3"
                         >
                             Registrarse

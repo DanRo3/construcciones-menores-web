@@ -1,43 +1,32 @@
-import Link from "next/link";
-import { Metadata } from "next";
-import { useState } from "react";
+'use client';
+import { useForm } from '@/hooks/useForm';
+import axios from 'axios';
+import Link from 'next/link'
+import React, { useState } from 'react'
 
-export const metadata: Metadata = {
-    title: "Iniciar sesión | Construcciones Menores",
-    description: "Esta es la página de inicio de sesion de la empresa Construcciones Menores",
-    // other metadata
-};
+
 interface FormState {
     email?: string;
     pass?: string;
-  }
+}
 
 
-
-const SigninPage = () => {
-    // const {credentials, setCredentials} = useState({
-    //     email:"",
-    //     password:"",
-    // })
-
-    // const {email, password } = credentials
-
-    // const handleChange = (e)=>{
-    //     setCredentials({
-    //         ...credentials,
-    //         [e.target.name] : [e.target.value]
-    //     })
-    // }
-    
-    // const handleSignin = (e)=>{
-    //     e.preventDefault();
-    //     console.log(credentials);
-    // }
+const Signin = () => {
+    const {form, handleChange} = useForm({
+        pass:"",
+        email:""
+    })
+    const { email , pass} = form
+    const handleSignin = async (e)=>{
+        e.preventDefault();
+        // console.log(credentials);
+        // const response = await axios.post('/api/auth/signin',credentials)
+        // console.log(response)
+    }
     
     return (
-        <>
-            <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
-                <div className="container">
+        <div>
+            <div className="container">
                     <div className="-mx-4 flex flex-wrap">
                         <div className="w-full px-4">
                             <div className="shadow-three mx-auto max-w-[500px] rounded bg-white px-6 py-10 dark:bg-dark sm:p-[60px]">
@@ -82,7 +71,7 @@ const SigninPage = () => {
                                         <input
                                             type="password"
                                             name="password"
-                                            value={password}
+                                            value={pass}
                                             onChange={handleChange}
                                             required
                                             placeholder="Introduce tu contraseña"
@@ -134,7 +123,7 @@ const SigninPage = () => {
                                     </div>
                                     <div className="mb-6">
                                         <button
-                                            className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
+                                            className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-full bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
                                             type="submit">
                                             Iniciar sesión
                                         </button>
@@ -207,9 +196,8 @@ const SigninPage = () => {
                         </defs>
                     </svg>
                 </div>
-            </section>
-        </>
+        </div>
     )
 }
 
-export default SigninPage;
+export default Signin

@@ -1,13 +1,35 @@
-import NewsLatterBox from "./SubscriptionBox";
+'use client';
+import { useEffect, useRef } from "react";
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
 const Contact = () => {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    if (!mapRef.current) return;
+
+    const map = L.map(mapRef.current, {
+      center: [23.08552, -82.41818],
+      zoom: 20
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    return () => {
+      map.remove();
+    };
+  }, []);
   return (
     <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4 lg:w-7/12 xl:w-8/12">
             <div
-              className="mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
+              className="mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:shadow-none dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
               data-wow-delay=".15s
               "
             >
@@ -66,7 +88,7 @@ const Contact = () => {
                     </div>
                   </div>
                   <div className="w-full px-4">
-                    <button className="rounded-sm bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark">
+                    <button className="rounded-full bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark">
                       Enviar feedback
                     </button>
                   </div>
@@ -74,8 +96,17 @@ const Contact = () => {
               </form>
             </div>
           </div>
+
+          {/* Mapa */}
           <div className="w-full px-4 lg:w-5/12 xl:w-4/12">
-            <NewsLatterBox />
+            <div className="">
+              <div
+                className='shadow-xl'
+                  id='map'
+                  ref={mapRef}
+                  style={{ height: '625px', width: '350px',borderRadius: "8px" }}
+                />
+            </div>
           </div>
         </div>
       </div>

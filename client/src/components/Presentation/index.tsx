@@ -18,7 +18,7 @@ const Presentation = () => {
     return (
             <section
                 id="home"
-                className="w-full px-8 py-12 grid grid-cols-1 md:grid-cols-2 items-center gap-8 max-w-6xl mx-auto mt-10"
+                className="w-full h-screen px-8 py-12 grid grid-cols-1 md:grid-cols-2 items-center gap-8 max-w-6xl mx-auto mt-10"
             >
                 <div>
                     <span className="block mb-4 text-xs md:text-sm text-indigo-500 font-medium italic">
