@@ -13,12 +13,14 @@ interface FormState {
 
 const Signin = () => {
     const {form, handleChange} = useForm({
+        email:"",
         pass:"",
-        email:""
     })
     const { email , pass} = form
+    
     const handleSignin = async (e)=>{
         e.preventDefault();
+        
         // console.log(credentials);
         // const response = await axios.post('/api/auth/signin',credentials)
         // console.log(response)
@@ -70,7 +72,7 @@ const Signin = () => {
                                         </label>
                                         <input
                                             type="password"
-                                            name="password"
+                                            name="pass"
                                             value={pass}
                                             onChange={handleChange}
                                             required

@@ -24,7 +24,7 @@ export default function HomeLayout({
 
     useEffect(() => {
         setTimeout(() => setLoading(false), 1000);
-    }, []);
+    }, [children]);
   return (
     <html suppressHydrationWarning lang="es">
       <head />
