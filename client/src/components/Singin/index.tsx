@@ -2,7 +2,8 @@
 import { useForm } from '@/hooks/useForm';
 import axios from 'axios';
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
+import React, { ChangeEvent, useState } from 'react'
 
 
 interface FormState {
@@ -12,16 +13,20 @@ interface FormState {
 
 
 const Signin = () => {
+    const router = useRouter();
     const {form, handleChange} = useForm({
-        email:"",
-        pass:"",
+        email:"user@gmail.com",
+        pass:"123456",
     })
+
     const { email , pass} = form
     
-    const handleSignin = async (e)=>{
+    const handleSignin = async (e:ChangeEvent<HTMLInputElement>)=>{
         e.preventDefault();
+        console.log(form);
         
-        // console.log(credentials);
+        router.push('/home')
+        
         // const response = await axios.post('/api/auth/signin',credentials)
         // console.log(response)
     }
@@ -57,6 +62,7 @@ const Signin = () => {
                                             type="email"
                                             name="email"
                                             required
+                                            autoComplete='off'
                                             value={email}
                                             onChange={handleChange}
                                             placeholder="Introduce tu correo"
