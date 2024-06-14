@@ -1,3 +1,5 @@
+import Breadcrumb from "@/components/Common/Breadcrumb";
+import Products from "@/components/Products";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,7 +11,11 @@ export const metadata: Metadata = {
 const ProductPage = () => {
   return (
     <div>
-      
+      <Breadcrumb
+        pageName="Página de productos"
+        description="Conoce los productos que ofrece la empresa"
+      />
+      <Products />
     </div>
   )
 }

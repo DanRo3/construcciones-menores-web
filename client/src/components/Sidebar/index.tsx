@@ -12,6 +12,7 @@ import { GoBriefcase } from "react-icons/go";
 import { AiOutlineProduct } from "react-icons/ai";
 import { VscFeedback } from "react-icons/vsc";
 import { RiUserSettingsLine } from "react-icons/ri";
+import { CgWebsite } from "react-icons/cg";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -22,6 +23,11 @@ const menuGroups = [
   {
     name: "Menú Principal",
     menuItems: [
+      {
+        icon:<CgWebsite />,
+        label: "Dashboard",
+        route: "#",
+      },
       {
         icon:<ShoppingOutlined />,
         label: "Pedidos",

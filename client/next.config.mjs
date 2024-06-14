@@ -1,6 +1,6 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    
-};
+export default {
+    images: {
+        domains: ['media.istockphoto.com']
+    }
+}
 
-export default nextConfig;

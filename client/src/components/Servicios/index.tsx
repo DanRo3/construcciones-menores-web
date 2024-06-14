@@ -1,17 +1,9 @@
 'use client';
 import React, { useRef } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
-import Decorators from "../Decorators";
+import { CardProps } from "@/types/interfaces";
 
-interface CardProps {
-  card: {
-    url: string;
-    title: string;
-    basePrice: number;
-    description: string;
-    id: number;
-  };
-}
+
 
 const cardsServices: { url: string; title: string; basePrice: number; description: string; id: number }[] = [
   {

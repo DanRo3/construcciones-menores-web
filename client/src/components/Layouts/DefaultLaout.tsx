@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import HeaderDashboard from "@/components/Header-Dashboard";
+import FooterMedio from "../Footer/footer";
 
 export default function DefaultLayout({
   children,
@@ -19,6 +20,7 @@ export default function DefaultLayout({
             <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {children}
             </div>
+            <FooterMedio />
           </main>
         </div>
       </div>

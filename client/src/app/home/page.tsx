@@ -4,6 +4,7 @@ import Mision from "@/components/Mision";
 import Servicios from "@/components/Servicios";
 import NewsLatterBox from "@/components/Contact/SubscriptionBox";
 import Contact from "@/components/Contact";
+import Products from "@/components/Products";
 
 export const metadata: Metadata = {
   title: "Inicio | Construcciones Menores",
@@ -18,6 +19,7 @@ export default function Home() {
       <Mision />
       <Servicios />
       <NewsLatterBox />
+      <Products />
       <Contact />
     </>
   );
