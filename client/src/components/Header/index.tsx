@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import Logo from '../../../public/images/logo/logo.svg';
 import Logo2 from '../../../public/images/logo/logo.png';
 import ThemeToggler from "./ThemeToggler";
-import menuData from "./menuData";
+import MenuData from "./menuData";
 import { UserOutlined } from '@ant-design/icons';
 
 
@@ -108,7 +108,7 @@ const Header = () => {
                                 }`}
                         >
                             <ul className="block lg:flex lg:space-x-12">
-                                {menuData.map((menuItem, index) => (
+                                {MenuData.map((menuItem, index) => (
                                     <li key={index} className="group relative">
                                         {menuItem.path ? (
                                             <Link

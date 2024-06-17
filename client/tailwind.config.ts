@@ -417,6 +417,5 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-animated'),
-    require('daisyui'),
   ],
 };

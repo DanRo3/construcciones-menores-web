@@ -1,6 +1,6 @@
 import { Menu } from "@/types/menu";
 
-const menuData: Menu[] = [
+const MenuData: Menu[] = [
     {
         id: 1,
         title: "INICIO",
@@ -32,4 +32,4 @@ const menuData: Menu[] = [
         newTab: false,
     },
 ];
-export default menuData;
+export default MenuData;

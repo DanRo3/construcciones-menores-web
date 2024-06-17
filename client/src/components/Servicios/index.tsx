@@ -1,8 +1,9 @@
 'use client';
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
 import { CardProps } from "@/types/interfaces";
-import { CgClose } from "react-icons/cg";
+import { useModal } from "../Common/ContextModal";
+import { Modal } from "antd";
 
 
 
@@ -53,6 +54,8 @@ const HorizontalScrollCarousel: React.FC = () => {
 };
 
 const Card: React.FC<CardProps> = ({ card }) => {
+  const { openModal } = useModal();
+
   return (
     <div
       key={card.id}
@@ -79,7 +82,7 @@ const Card: React.FC<CardProps> = ({ card }) => {
                 {card.description}
                 </p>
             </div>
-            <button className="border-white border-2 p-3 rounded-xl hover:bg-green-500 transition-all" onClick={()=>document.getElementById('my_modal_1').showModal()}>Solicitar</button>
+            <button className="border-white border-2 p-3 rounded-xl hover:bg-green-500 transition-all" onClick={() => openModal({...card})}>Solicitar</button>
         </div>
       </div>
     </div>
@@ -87,29 +90,29 @@ const Card: React.FC<CardProps> = ({ card }) => {
 };
 
 const Servicios: React.FC = () => {
-  return (
-    <div>
-      <div className="flex w-full text-center items-center justify-center">
-        <span className="font-semibold text-5xl">
-          Nuestros servicios
-        </span>
-      </div>
-      <HorizontalScrollCarousel />
-      <dialog id="my_modal_1" className="modal ">
-        <div className="md:w-1/2 h-4/5 w-full bg-white flex flex-col rounded-3xl overflow-hidden p-4">
-          <div className="bg-slate-500 w-full">
-            <h3>Servicio:</h3>
-            <p></p>
-          </div>
-          <div className="modal-action mt-0 w-full">
-            <form method="dialog">
-              <button className="btn text-base">Cancelar</button>
-            </form>
-          </div>
+    const { isVisible, modalData, closeModal } = useModal();
+    return (
+      <div>
+        <div className="flex w-full text-center items-center justify-center">
+          <span className="font-semibold text-5xl">
+            Nuestros servicios
+          </span>
         </div>
-      </dialog>
-    </div>
-  );
+        <HorizontalScrollCarousel />
+        {isVisible && (
+        <Modal
+          title="Detalles del Servicio"
+          visible={isVisible}
+          onOk={closeModal}
+          onCancel={closeModal}
+        >
+          <p><strong>Título:</strong> {modalData.title}</p>
+          <p><strong>Descripción:</strong> {modalData.description}</p>
+          <p><strong>Precio:</strong> ${modalData.basePrice} / Mt</p>
+        </Modal>
+      )}
+      </div>
+    );
 };
 
 export default Servicios;

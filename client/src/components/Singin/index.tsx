@@ -1,5 +1,7 @@
 'use client';
 import { useForm } from '@/hooks/useForm';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/reducers/authSlice';
 import axios from 'axios';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
@@ -21,7 +23,7 @@ const Signin = () => {
 
     const { email , pass} = form
     
-    const handleSignin = async (e:ChangeEvent<HTMLInputElement>)=>{
+    const handleSignin =  (e:ChangeEvent<HTMLInputElement>)=>{
         e.preventDefault();
         console.log(form);
         

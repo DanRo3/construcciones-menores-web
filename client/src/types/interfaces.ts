@@ -6,4 +6,12 @@ export interface CardProps {
       description: string;
       id: number;
     };
-  }
+}
+
+export type ModalDataType = {
+  title: string;
+  description: string;
+  basePrice: number;
+};
+
+export type ExtendedModalDataType = ModalDataType & { type?: string };

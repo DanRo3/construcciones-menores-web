@@ -7,7 +7,7 @@ interface MisionProps {}
 const Mision: React.FC<MisionProps> = () => {
   return (
     <section id="mision" className="">
-      <div className="">
+      <div className="mt-40 md:mt-0">
         <TextParallaxContent
           imgUrl="https://cdn.pixabay.com/photo/2024/05/14/05/38/builder-8760328_640.jpg"
           subheading="Nuestros valores"
