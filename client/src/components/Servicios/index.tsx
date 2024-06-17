@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from "react";
+import React, { useRef} from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
 import { CardProps } from "@/types/interfaces";
 import { useModal } from "../Common/ContextModal";
