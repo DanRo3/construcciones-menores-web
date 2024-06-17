@@ -151,7 +151,7 @@ const Singup = () => {
                                 </div>
                                 <div className="mb-6">
                                     <button
-                                        className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-sm bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
+                                        className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-full bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
                                         type="submit">
                                         Crear cuenta
                                     </button>

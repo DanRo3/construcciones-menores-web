@@ -2,6 +2,7 @@
 import React, { useRef } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
 import { CardProps } from "@/types/interfaces";
+import { CgClose } from "react-icons/cg";
 
 
 
@@ -78,7 +79,7 @@ const Card: React.FC<CardProps> = ({ card }) => {
                 {card.description}
                 </p>
             </div>
-            <button className="border-white border-2 p-3 rounded-xl hover:bg-green-500 transition-all">Solicitar</button>
+            <button className="border-white border-2 p-3 rounded-xl hover:bg-green-500 transition-all" onClick={()=>document.getElementById('my_modal_1').showModal()}>Solicitar</button>
         </div>
       </div>
     </div>
@@ -94,6 +95,19 @@ const Servicios: React.FC = () => {
         </span>
       </div>
       <HorizontalScrollCarousel />
+      <dialog id="my_modal_1" className="modal ">
+        <div className="md:w-1/2 h-4/5 w-full bg-white flex flex-col rounded-3xl overflow-hidden p-4">
+          <div className="bg-slate-500 w-full">
+            <h3>Servicio:</h3>
+            <p></p>
+          </div>
+          <div className="modal-action mt-0 w-full">
+            <form method="dialog">
+              <button className="btn text-base">Cancelar</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
