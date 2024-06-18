@@ -1,11 +1,93 @@
 'use client';
-import React, { useRef} from "react";
+import React, { useRef, useState} from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
 import { CardProps } from "@/types/interfaces";
 import { useModal } from "../Common/ContextModal";
-import { Modal } from "antd";
+import {
+  Modal,
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  TreeSelect,
+} from 'antd';
 
+const { RangePicker } = DatePicker;
 
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 6 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 14 },
+  },
+};
+
+const MunicipiosHabana = [
+  {
+    title: 'Habana Vieja',
+    value: '0-0',
+  },
+  {
+    title: 'Centro Habana',
+    value: '0-1',
+  },
+  {
+    title: 'Cerro',
+    value: '0-2',
+  },
+  {
+    title: 'Diez de Octubre',
+    value: '0-3',
+  },
+  {
+    title: 'Plaza',
+    value: '0-4',
+  },
+  {
+    title: 'Arroyo Naranjo',
+    value: '0-5',
+  },
+  {
+    title: 'Boyeros',
+    value: '0-6',
+  },
+  {
+    title: 'Cotorro',
+    value: '0-7',
+  },
+  {
+    title: 'San Miguel del Padrón',
+    value: '0-8',
+  },
+  {
+    title: 'Playa',
+    value: '0-9',
+  },
+  {
+    title: 'Marianao',
+    value: '0-10',
+  },
+  {
+    title: 'La Lisa',
+    value: '0-11',
+  },
+  {
+    title: 'Habana del Este',
+    value: '0-12',
+  },
+  {
+    title: 'Guanabacoa',
+    value: '0-13',
+  },
+  {
+    title: 'Regla',
+    value: '0-14',
+  },
+];
 
 const cardsServices: { url: string; title: string; basePrice: number; description: string; id: number }[] = [
   {
@@ -91,6 +173,12 @@ const Card: React.FC<CardProps> = ({ card }) => {
 
 const Servicios: React.FC = () => {
     const { isVisible, modalData, closeModal } = useModal();
+    const [value, setValue] = useState<string>();
+
+    const onChange = (newValue: string) => {
+      console.log(newValue);
+      setValue(newValue);
+    };
     return (
       <div>
         <div className="flex w-full text-center items-center justify-center">
@@ -101,14 +189,58 @@ const Servicios: React.FC = () => {
         <HorizontalScrollCarousel />
         {isVisible && (
         <Modal
-          title="Detalles del Servicio"
+          title="Solicitud de servicio"
           visible={isVisible}
           onOk={closeModal}
           onCancel={closeModal}
+          className="!h-3/5 !w-1/2 !dark:bg-slate-800"
         >
-          <p><strong>Título:</strong> {modalData.title}</p>
-          <p><strong>Descripción:</strong> {modalData.description}</p>
-          <p><strong>Precio:</strong> ${modalData.basePrice} / Mt</p>
+          <Form {...formItemLayout} variant="filled" style={{ maxWidth: 600 }}>
+              <Form.Item
+                label=""
+                name="InputNumber"
+                rules={[{ required: true, message: 'Por favor escribe un número de teléfono' }]}
+              >
+                <InputNumber style={{ width: '100%' }} placeholder="Número de teléfono"/>
+              </Form.Item>
+
+              <Form.Item
+                label=""
+                name="TreeSelect"
+                rules={[{ required: true, message: 'Por favor selecciona un municipio' }]}
+              >
+                <TreeSelect 
+                placeholder="Selecciona tu municipio"
+                style={{ width: '100%' }}
+                value={value}
+                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                treeData={MunicipiosHabana}
+                treeDefaultExpandAll
+                onChange={onChange}/>
+              </Form.Item>
+
+              <Form.Item
+                label=""
+                name="TextArea"
+                rules={[{ required: true, message: 'Por favor escribe una referencia' }]}
+              >
+                <Input.TextArea placeholder="Escribe aqui una referencia de la dirección"/>
+              </Form.Item>
+
+              <Form.Item
+                label=""
+                name="RangePicker"
+                rules={[{ required: true, message: 'Please input!' }]}
+              >
+                <RangePicker />
+              </Form.Item>
+
+              <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
         </Modal>
       )}
       </div>

@@ -7,7 +7,7 @@ const cardsProducts: { url: string; title: string; basePrice: number; descriptio
       url: "https://media.istockphoto.com/id/182177634/es/foto/almac%C3%A9n.jpg?s=612x612&w=0&k=20&c=soJ0qoGlKEecsKpJsPfLL8FbS2wSBHfZdMv2UkT3R7I=",
       title: "Cemento",
       basePrice: 20,
-      description: "Todo tipo de cementos",
+      description: "Cemento de fundición",
       id: 1,
     },
     {
@@ -18,18 +18,25 @@ const cardsProducts: { url: string; title: string; basePrice: number; descriptio
       id: 2,
     },
     {
-      url: "https://media.istockphoto.com/id/596042932/es/foto/conjunto-de-herramientas-de-trabajo-de-la-mano-sobre-fondo-gris.jpg?s=612x612&w=0&k=20&c=KFPIvtYGal_ZyadcyUY44Y28DbdfEcPVtjOXnl-Vn7E=",
-      title: "Herramientas",
-      basePrice: 0,
-      description: "Todo tipo de herramientas",
+      url: "https://media.istockphoto.com/id/1253655358/es/foto/caja-con-un-destornillador-y-boquillas-sobre-un-fondo-rosa.jpg?s=612x612&w=0&k=20&c=XS5-ZLYmE1meaID-jnHN-4ru6p0TfUlpJuhG6LQSh-8=",
+      title: "Kit de Herramientas",
+      basePrice: 48,
+      description: "Conjunto completo de herramientas para trabajos de construcción",
       id: 3,
     },
     {
-      url: "https://media.istockphoto.com/id/1440019701/es/foto/primer-plano-del-fontanero-reparando-el-lavabo-con-herramienta-en-el-ba%C3%B1o.jpg?s=612x612&w=0&k=20&c=oRJF-IwtxBUUff5PFEiNEOfCaDaueRngG5_oG79B3JM=",
-      title: "Accesorios",
-      basePrice: 0,
-      description: "Todo tipos de accesorios",
+      url: "https://media.istockphoto.com/id/140806786/es/foto/agua-vertiendo-de-ba%C3%B1o-moderno-faucet.jpg?s=612x612&w=0&k=20&c=M6f9QMu7tQwxYO5T51aCb_XUt0QYym3y5QsVuNSDr9s=",
+      title: "Grifo de Baño",
+      basePrice: 12,
+      description: "Grifos de baño de alta calidad para instalaciones modernas",
       id: 4,
+    },
+    {
+      url: "https://media.istockphoto.com/id/1288466155/es/v%C3%ADdeo/herramienta-m%C3%BAltiple.jpg?s=640x640&k=20&c=cf3vkAjeS7GVgHD2g76t3gc_cXQ2FMkctZxd7ei4VAQ=",
+      title: "Alicates Multifunción",
+      basePrice: 23,
+      description: "Alicates diseñados para diversas aplicaciones de instalación y reparación",
+      id: 5,
     },
     
   ];
@@ -58,22 +65,26 @@ const Produts = () => {
 const CardProduct:React.FC<CardProps> = ({ card }) => {
     return (
       <div key={card.id}>
-        <div  className="group relative flex h-64 shadow-6 dark:shadow-signUp items-end overflow-hidden rounded-lg bg-gray-100 p-4">
+        <div>
+          <div className="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 lg:mb-3">
             <div
             style={{
                 backgroundImage: `url(${card.url})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}
-            className="absolute inset-0 z-0 transition-transform duration-300 group-hover:scale-110"
+            className="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110"
             >
+            </div>
+          </div>
 
+          <div>
+            <div className="hover:gray-800 mb-1 text-gray-500 dark:text-white transition duration-100 lg:text-lg">{card.title}</div>
+
+            <div className="flex items-end gap-2">
+              <span className="font-bold text-green lg:text-lg">${card.basePrice}</span>
             </div>
-    
-            <div className="relative flex w-full flex-col rounded-lg bg-transparent backdrop-blur-md p-4 text-center">
-                <span className="text-white">{card.title}</span>
-                <span className="text-lg font-bold text-white lg:text-xl">{card.description}</span>
-            </div>
+          </div>
         </div>
       </div>
     )

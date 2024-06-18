@@ -5,13 +5,7 @@ import { loginSuccess } from '../../redux/reducers/authSlice';
 import axios from 'axios';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
-import React, { ChangeEvent, useState } from 'react'
-
-
-interface FormState {
-    email?: string;
-    pass?: string;
-}
+import React, { FormEvent,} from 'react'
 
 
 const Signin = () => {
@@ -23,7 +17,7 @@ const Signin = () => {
 
     const { email , pass} = form
     
-    const handleSignin =  (e:ChangeEvent<HTMLInputElement>)=>{
+    const handleSignin =  (e: FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         console.log(form);
         
@@ -32,6 +26,16 @@ const Signin = () => {
         // const response = await axios.post('/api/auth/signin',credentials)
         // console.log(response)
     }
+
+    // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault();
+    //     try {
+    //       const response = await axios.post('URL_DEL_LOGIN_ENDPOINT', { username, password });
+    //       dispatch(loginSuccess(response.data));
+    //     } catch (error) {
+    //       console.error('Error al iniciar sesión:', error);
+    //     }
+    // };
     
     return (
         <div>
