@@ -1,4 +1,5 @@
 import BreadcrumbDS from "@/components/Common/BreadcrumbDS";
+import AdminProducts from "@/components/Dashboard/AdminProducts";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ const Product = () => {
   return (
     <>
       <BreadcrumbDS pageName="Productos" />
+      <AdminProducts />
     </>
   );
 };

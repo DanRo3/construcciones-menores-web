@@ -1,4 +1,5 @@
 import BreadcrumbDS from "@/components/Common/BreadcrumbDS";
+import AdminService from "@/components/Dashboard/AdminService";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ const Service = () => {
   return (
     <>
       <BreadcrumbDS pageName="Servicios" />
+      <AdminService />
     </>
   );
 };

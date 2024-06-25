@@ -83,28 +83,28 @@ const MunicipiosHabana = [
 const cardsServices: {
   url: string;
   title: string;
-  basePrice: number;
+  price: number;
   description: string;
   id: number;
 }[] = [
   {
     url: "https://media.istockphoto.com/id/468996060/es/foto/trabajador-de-construcci%C3%B3n-de-la-casa-de-alba%C3%B1iler%C3%ADa-wal.jpg?s=612x612&w=0&k=20&c=9AARfQCtfEnnNMf4Ri3YlvTuGybab02PgH34FVKYVSM=",
     title: "Construccion de muros",
-    basePrice: 20,
+    price: 20,
     description: "Levantamiento de paredes y muros",
     id: 1,
   },
   {
     url: "https://media.istockphoto.com/id/1221306297/es/foto/el-hombre-vierte-pintura-en-la-bandeja-y-sumerge-el-rodillo-trabajador-profesional-de-la.jpg?s=612x612&w=0&k=20&c=_qILsrUuQiFUVL7BE8I-gwXxp_pY8T0VJdv6Tpd4Ab8=",
     title: "Servicio de pintura",
-    basePrice: 3,
+    price: 3,
     description: "Pintura para interiores y fachadas",
     id: 2,
   },
   {
     url: "https://media.istockphoto.com/id/1083735696/es/foto/perito-en-casco-y-chaqueta-de-alta-visibilidad-con-tableta-digital-realizando-inspecci%C3%B3n-de.jpg?s=612x612&w=0&k=20&c=iXRH7zHgmMuCGr4vMYAecxzEbXXkVh8fa9q876sprzw=",
     title: "Servicio de defectación",
-    basePrice: 20,
+    price: 20,
     description: "Pintura para interiores y fachadas",
     id: 2,
   },
@@ -149,7 +149,7 @@ const Card: React.FC<CardProps> = ({ card }) => {
       ></div>
       <div className="absolute inset-0 z-10 flex flex-col justify-between">
         <div className="self-end backdrop-blur-sm bg-black/30 text-white text-3xl p-2 rounded-lg mt-3 mr-3">
-          <p>{card.basePrice} $ / Mt</p>
+          <p>{card.price} $ / Mt</p>
         </div>
         <div className="flex flex-row justify-between backdrop-blur-sm bg-black/30 text-white p-6">
           <div className="flex flex-col">

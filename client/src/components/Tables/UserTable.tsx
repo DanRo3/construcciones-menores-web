@@ -17,8 +17,8 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
 
   return (
     <div className="overflow-x-auto rounded-[10px] border border-stroke bg-white p-4 shadow-1 dark:border-dark-3 dark:bg-gray-dark dark:shadow-card sm:p-7.5">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50 dark:bg-gray-dark">
+      <table className="min-w-full divide-y divide-gray-200 rounded-2xl overflow-hidden">
+        <thead className="bg-gray-50 dark:bg-gray-700">
           <tr>
             <th className=" py-2 text-center text-xs font-medium text-gray-500 dark:text-white tracking-wider sm:text-sm md:text-base">
               Usuario
@@ -34,11 +34,11 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-dark-2 divide-y divide-gray-200">
+        <tbody className="bg-white dark:bg-gray-dark divide-y divide-gray-200 ">
           {users.map((user) => (
             <tr
               key={user.id}
-              className="hover:bg-gray-100 dark:hover:bg-slate-900"
+              className="hover:bg-gray-100 dark:hover:bg-slate-600"
             >
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">

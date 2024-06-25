@@ -1,17 +1,30 @@
 export interface CardProps {
-    card: {
-      url: string;
-      title: string;
-      basePrice: number;
-      description: string;
-      id: number;
-    };
+  card:{
+    url: string;
+    title: string;
+    price: number;
+    description: string;
+    id: number;
+  }
+}
+export interface Producto {
+    url: string;
+    title: string;
+    price: number;
+    id: number;
+}
+export interface Servicio {
+    url: string;
+    title: string;
+    price: number;
+    description:string;
+    id: number;
 }
 
 export type ModalDataType = {
   title: string;
   description: string;
-  basePrice: number;
+  price: number;
 };
 
 export type ExtendedModalDataType = ModalDataType & { type?: string };
