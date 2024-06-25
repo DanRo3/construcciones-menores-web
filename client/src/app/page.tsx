@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Home from "./home/page";
 
 export const metadata: Metadata = {
   title: "Inicio | Construcciones Menores",
@@ -9,6 +8,7 @@ export const metadata: Metadata = {
 
 export default function Inicio() {
   return (
-    <></>
+    <>
+    </>
   );
 }

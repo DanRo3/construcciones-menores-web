@@ -26,32 +26,32 @@ const menuGroups = [
       {
         icon:<CgWebsite />,
         label: "Dashboard",
-        route: "#",
+        route: "/dashboard",
       },
       {
         icon:<ShoppingOutlined />,
         label: "Pedidos",
-        route: "#",
+        route: "/dashboard/pedidos",
       },
       {
         icon:<GoBriefcase /> ,
         label: "Servicios",
-        route: "#",
+        route: "/dashboard/servicios",
       },
       {
         icon:<AiOutlineProduct /> ,
         label: "Productos",
-        route: "#",
+        route: "/dashboard/productos",
       },
       {
         icon:<VscFeedback /> ,
         label: "Feedback",
-        route: "#",
+        route: "/dashboard/feedback",
       },
       {
         icon:<RiUserSettingsLine /> ,
         label: "Usuarios",
-        route: "#",
+        route: "/dashboard/usuarios",
       },
     ],
   },

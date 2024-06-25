@@ -1,9 +1,7 @@
-import DefaultLayout from "@/components/Layouts/DefaultLaout";
 import { Metadata } from "next";
 import "@/styles/satoshi.css";
 import "@/styles/index.css";
 import ECommerce from "@/components/Dashboard/E-commerce";
-
 
 export const metadata: Metadata = {
   title: "Dashboard | Construcciones Menores",
@@ -11,10 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function Dashboard() {
-  
   return (
-      <DefaultLayout>
-        <ECommerce />
-      </DefaultLayout>
+    <>
+      <ECommerce />
+    </>
   );
 }

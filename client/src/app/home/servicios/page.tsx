@@ -3,9 +3,10 @@ import Servicios from "@/components/Servicios";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Servicios | Construcciones Menores",
-    description: "Esta es la página de servicios de la empresa Construcciones Menores",
-    // other metadata
+  title: "Servicios | Construcciones Menores",
+  description:
+    "Esta es la página de servicios de la empresa Construcciones Menores",
+  // other metadata
 };
 
 const ServicesPage = () => {
@@ -14,10 +15,11 @@ const ServicesPage = () => {
       <Breadcrumb
         pageName="Página de servicios"
         description="Página para dar a conocer los servicios de la empresa"
+        direction="/home"
       />
       <Servicios />
     </div>
-  )
-}
+  );
+};
 
 export default ServicesPage;
