@@ -1,12 +1,15 @@
-"use client";
 import { Servicio } from "@/types/interfaces";
-import ServiceTable from "../Tables/ServiceTable";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const AdminService = () => {
-  const Services: Servicio[] = [
+interface ServiceState {
+  services: Servicio[];
+}
+
+const initialState: ServiceState = {
+  services: [
     {
       url: "https://media.istockphoto.com/id/468996060/es/foto/trabajador-de-construcci%C3%B3n-de-la-casa-de-alba%C3%B1iler%C3%ADa-wal.jpg?s=612x612&w=0&k=20&c=9AARfQCtfEnnNMf4Ri3YlvTuGybab02PgH34FVKYVSM=",
-      title: "Construcción de muros",
+      title: "Construccion de muros",
       price: 20,
       description: "Levantamiento de paredes y muros",
       id: 1,
@@ -22,15 +25,16 @@ const AdminService = () => {
       url: "https://media.istockphoto.com/id/1083735696/es/foto/perito-en-casco-y-chaqueta-de-alta-visibilidad-con-tableta-digital-realizando-inspecci%C3%B3n-de.jpg?s=612x612&w=0&k=20&c=iXRH7zHgmMuCGr4vMYAecxzEbXXkVh8fa9q876sprzw=",
       title: "Servicio de defectación",
       price: 20,
-      description: "Defectación de casas y estructuras",
+      description: "Pintura para interiores y fachadas",
       id: 3,
     },
-  ];
-  return (
-    <>
-      <ServiceTable services={Services} />
-    </>
-  );
+  ],
 };
 
-export default AdminService;
+export const ServiciceSlice = createSlice({
+    name: 'serviceClient',
+    initialState,
+    reducers: {}
+})
+
+export default ServiciceSlice.reducer;

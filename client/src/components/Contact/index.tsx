@@ -1,7 +1,7 @@
-'use client';
+"use client";
 import { useEffect, useRef } from "react";
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
 
 const Contact = () => {
   const mapRef = useRef(null);
@@ -11,12 +11,21 @@ const Contact = () => {
 
     const map = L.map(mapRef.current, {
       center: [23.08552, -82.41818],
-      zoom: 20
+      zoom: 20,
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    const circle = L.circle([23.08552, -82.41818], {
+      color: "red",
+      fillColor: "#f03",
+      fillOpacity: 0.5,
+      radius: 10,
+    }).addTo(map);
+
+    circle.bindPopup("Construcciones Menores.");
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
     return () => {
@@ -37,7 +46,8 @@ const Contact = () => {
                 ¿Necesitas ayuda? Contáctanos
               </h2>
               <p className="mb-12 text-base font-medium text-body-color">
-                Nuestro equipo de soporte se comunicará con usted lo antes posible por correo electrónico.
+                Nuestro equipo de soporte se comunicará con usted lo antes
+                posible por correo electrónico.
               </p>
               <form>
                 <div className="-mx-4 flex flex-wrap">
@@ -101,11 +111,11 @@ const Contact = () => {
           <div className="w-full px-4 lg:w-5/12 xl:w-4/12">
             <div className="">
               <div
-                className='shadow-xl'
-                  id='map'
-                  ref={mapRef}
-                  style={{ height: '625px', width: '350px',borderRadius: "8px" }}
-                />
+                className="shadow-xl"
+                id="map"
+                ref={mapRef}
+                style={{ height: "625px", width: "350px", borderRadius: "8px" }}
+              />
             </div>
           </div>
         </div>

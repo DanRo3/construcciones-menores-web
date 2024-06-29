@@ -1,4 +1,5 @@
 import BreadcrumbDS from "@/components/Common/BreadcrumbDS";
+import AdminFeedback from "@/components/Dashboard/AdminFeedback";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ const Feedback = () => {
   return (
     <>
       <BreadcrumbDS pageName="Feedback" />
+      <AdminFeedback />
     </>
   );
 };

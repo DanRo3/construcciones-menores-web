@@ -18,7 +18,7 @@ const Header = () => {
     setNavbarOpen(!navbarOpen);
   };
 
-  const userLogged = true;
+  const userLogged = false;
 
   // Sticky Navbar
   const [sticky, setSticky] = useState(false);

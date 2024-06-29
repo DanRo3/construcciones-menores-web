@@ -1,18 +1,29 @@
 import { User } from "@/types/interfaces";
-import React from "react";
+import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { useModal } from "../Common/ContextModal";
+import { Modal } from "antd";
+import EditUserModal from "../Common/EditUserModal";
 
 interface UserTableProps {
   users: User[];
 }
 
 const UserTable: React.FC<UserTableProps> = ({ users }) => {
-  const handleDeleteUser = (userId: number) => {
-    console.log(`Eliminar usuario con ID: ${userId}`);
+  const { isVisible, modalData, closeModal } = useModal();
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const handleRowClick = (user: User) => {
+    setSelectedUser(user);
   };
 
-  const handleEditUser = (userId: number) => {
-    console.log(`Editar usuario con ID: ${userId}`);
+  const handleEditUser = (user: User) => {
+    closeModal();
+    setSelectedUser(user);
+  };
+
+  const handleDeleteUser = (userId: number) => {
+    console.log(`Eliminar usuario con ID: ${userId}`);
   };
 
   return (
@@ -65,7 +76,7 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
                 <div className="flex space-x-2">
                   <button
                     className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={() => handleEditUser(user.id)}
+                    onClick={() => handleEditUser(user)}
                   >
                     <FaEdit />
                   </button>
@@ -81,6 +92,17 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
           ))}
         </tbody>
       </table>
+      {selectedUser && (
+        <EditUserModal
+          visible={!!selectedUser}
+          onClose={() => setSelectedUser(null)}
+          userData={selectedUser}
+          onSave={(updatedUser) => {
+            console.log("Usuario actualizado:", updatedUser);
+            closeModal();
+          }}
+        />
+      )}
     </div>
   );
 };

@@ -20,7 +20,7 @@ export default function DashboardLayout({
   // const pathname = usePathname();
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => setLoading(false), 500);
   }, []);
   return (
     <html suppressHydrationWarning lang="es">

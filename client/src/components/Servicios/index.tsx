@@ -1,8 +1,9 @@
 "use client";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
-import { CardProps, ServiceValues } from "@/types/interfaces";
+import { CardProps, ServiceValues, Servicio } from "@/types/interfaces";
 import { useModal } from "../Common/ContextModal";
+import dayjs from "dayjs";
 
 import {
   Modal,
@@ -14,103 +15,18 @@ import {
   TreeSelect,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
+import { municipios } from "./dataMunicipios";
+import { useAppSelector } from "@/hooks/useStore";
 
 const { RangePicker } = DatePicker;
 
-const MunicipiosHabana = [
-  {
-    title: "Habana Vieja",
-    value: "Habana Vieja",
-  },
-  {
-    title: "Centro Habana",
-    value: "Centro Habana",
-  },
-  {
-    title: "Cerro",
-    value: "Cerro",
-  },
-  {
-    title: "Diez de Octubre",
-    value: "Diez de Octubre",
-  },
-  {
-    title: "Plaza",
-    value: "Plaza",
-  },
-  {
-    title: "Arroyo Naranjo",
-    value: "Arroyo Naranjo",
-  },
-  {
-    title: "Boyeros",
-    value: "Boyeros",
-  },
-  {
-    title: "Cotorro",
-    value: "Cotorro",
-  },
-  {
-    title: "San Miguel del Padrón",
-    value: "San Miguel del Padrón",
-  },
-  {
-    title: "Playa",
-    value: "Playa",
-  },
-  {
-    title: "Marianao",
-    value: "Marianao",
-  },
-  {
-    title: "La Lisa",
-    value: "La Lisa",
-  },
-  {
-    title: "Habana del Este",
-    value: "Habana del Este",
-  },
-  {
-    title: "Guanabacoa",
-    value: "Guanabacoa",
-  },
-  {
-    title: "Regla",
-    value: "Regla",
-  },
-];
-
-const cardsServices: {
-  url: string;
-  title: string;
-  price: number;
-  description: string;
-  id: number;
-}[] = [
-  {
-    url: "https://media.istockphoto.com/id/468996060/es/foto/trabajador-de-construcci%C3%B3n-de-la-casa-de-alba%C3%B1iler%C3%ADa-wal.jpg?s=612x612&w=0&k=20&c=9AARfQCtfEnnNMf4Ri3YlvTuGybab02PgH34FVKYVSM=",
-    title: "Construccion de muros",
-    price: 20,
-    description: "Levantamiento de paredes y muros",
-    id: 1,
-  },
-  {
-    url: "https://media.istockphoto.com/id/1221306297/es/foto/el-hombre-vierte-pintura-en-la-bandeja-y-sumerge-el-rodillo-trabajador-profesional-de-la.jpg?s=612x612&w=0&k=20&c=_qILsrUuQiFUVL7BE8I-gwXxp_pY8T0VJdv6Tpd4Ab8=",
-    title: "Servicio de pintura",
-    price: 3,
-    description: "Pintura para interiores y fachadas",
-    id: 2,
-  },
-  {
-    url: "https://media.istockphoto.com/id/1083735696/es/foto/perito-en-casco-y-chaqueta-de-alta-visibilidad-con-tableta-digital-realizando-inspecci%C3%B3n-de.jpg?s=612x612&w=0&k=20&c=iXRH7zHgmMuCGr4vMYAecxzEbXXkVh8fa9q876sprzw=",
-    title: "Servicio de defectación",
-    price: 20,
-    description: "Pintura para interiores y fachadas",
-    id: 2,
-  },
-];
+const MunicipiosHabana = municipios;
 
 const HorizontalScrollCarousel: React.FC = () => {
+  const cardsServices: Servicio[] = useAppSelector(
+    (state) => state.serviceClient.services
+  );
+
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: targetRef,
@@ -201,16 +117,7 @@ const Servicios: React.FC = () => {
             alignContent: "center",
             zIndex: "9999999",
           }}
-          footer={
-            [
-              // <Button key={89129312389123} style={{ display: "none" }}>
-              //   Cancelar
-              // </Button>,
-              // <Button key={89129312389124} style={{ display: "none" }}>
-              //   Aceptar
-              // </Button>,
-            ]
-          }
+          footer={[]}
         >
           <Form variant="filled" onFinish={handleSubmit}>
             <Form.Item
@@ -267,7 +174,11 @@ const Servicios: React.FC = () => {
                 { required: true, message: "Selecciona un rango de días" },
               ]}
             >
-              <RangePicker className="z-999999" />
+              <RangePicker
+                className="z-999999"
+                minDate={dayjs()}
+                maxDate={dayjs().add(30, "day")}
+              />
             </Form.Item>
 
             <Form.Item

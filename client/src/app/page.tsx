@@ -5,10 +5,6 @@ export const metadata: Metadata = {
   description: "Pagina de inicio de Construcciones Menores",
 };
 
-
 export default function Inicio() {
-  return (
-    <>
-    </>
-  );
+  return <></>;
 }

@@ -16,7 +16,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({
   const [modalData, setModalData] = useState<ModalDataType>({
     title: "",
     description: "",
-    basePrice: 0,
+    price: 0,
   });
 
   const [isVisible, setIsVisible] = useState<boolean>(false);

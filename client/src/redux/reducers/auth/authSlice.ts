@@ -1,15 +1,18 @@
-// src/features/auth/authSlice.ts
+
+import { User } from '@/types/interfaces';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface AuthState {
   isAuthenticated: boolean;
-  user: null | object; // Aquí puedes expandir con datos del usuario si es necesario
+  user: User; 
 }
 
 const initialState: AuthState = {
   isAuthenticated: true,
   user: {
-    'user':'DanRo'
+    "id": 171717,
+    'name':'DanRo',
+    "email":"drgrassnk445@gmail.com"
   },
 };
 
@@ -23,7 +26,9 @@ export const AuthSlice = createSlice({
     },
     logout(state) {
       state.isAuthenticated = false;
-      state.user = null;
+      state.user = {"id": 0,
+    'name':'',
+    "email":""};
     },
   },
 });
