@@ -1,6 +1,16 @@
 "use client";
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { MdOutlineEqualizer, MdSavings } from "react-icons/md";
+import {
+  LuCheckCircle,
+  LuHeartHandshake,
+  LuMessagesSquare,
+} from "react-icons/lu";
+import { BsShieldCheck } from "react-icons/bs";
+import { FaGratipay } from "react-icons/fa";
+import { TfiStatsUp } from "react-icons/tfi";
+import { TbZoomScan } from "react-icons/tb";
 
 interface MisionProps {}
 
@@ -134,16 +144,25 @@ const OverlayCopy: React.FC<OverlayCopyProps> = ({ subheading, heading }) => {
 
 const ContentOne: React.FC = () => (
   <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
-    <h2 className="col-span-1 text-3xl font-bold md:col-span-4">Defendemos</h2>
+    <div className="col-span-1 text-3xl font-bold md:col-span-4">
+      <h2 className="col-span-1 text-3xl font-bold md:col-span-4">
+        Defendemos
+      </h2>
+      <BsShieldCheck className="text-9xl text-green-600 md:mt-5 md:ml-6" />
+    </div>
     <div className="col-span-1 md:col-span-8">
-      <p className="mb-4 text-xl md:text-2xl">+ Compromiso con el cliente:</p>
+      <p className="mb-4 text-xl md:text-2xl flex flex-row">
+        <LuHeartHandshake className="text-3xl text-red-800" /> Compromiso con el
+        cliente:
+      </p>
       <p className="mb-8 text-xl md:text-lg">
         Ponemos a nuestros clientes en el centro de todo lo que hacemos.
         Escuchamos sus necesidades, nos adaptamos a sus deseos y garantizamos
         que estén satisfechos con cada proyecto.
       </p>
-      <p className="mb-4 text-xl md:text-2xl">
-        + Eficiencia y ahorro de costos:
+      <p className="mb-4 text-xl md:text-2xl flex flex-row">
+        <MdSavings className="text-3xl text-blue-700" /> Eficiencia y ahorro de
+        costos:
       </p>
       <p className="mb-8 text-xl md:text-lg">
         Buscamos constantemente formas innovadoras de reducir los costos de
@@ -156,19 +175,26 @@ const ContentOne: React.FC = () => (
 
 const ContentTwo: React.FC = () => (
   <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
-    <h2 className="col-span-1 text-3xl font-bold md:col-span-4">Construimos</h2>
+    <div className="col-span-1 text-3xl font-bold md:col-span-4">
+      <h2 className="">Construimos</h2>
+      <LuCheckCircle className="text-9xl text-green-600 md:mt-5 md:ml-6" />
+    </div>
     <div className="col-span-1 md:col-span-8">
-      <p className="mb-4 text-xl md:text-2xl">+ Calidad sin compromisos:</p>
+      <p className="mb-4 text-xl md:text-2xl flex flex-row">
+        <MdOutlineEqualizer className="text-3xl text-green-700" /> Calidad sin
+        compromisos:
+      </p>
       <p className="mb-8 text-xl md:text-lg">
         No importa el tamaño del proyecto, siempre nos esforzamos por ofrecer
         resultados de alta calidad. Utilizamos materiales duraderos y técnicas
         de construcción probadas.
       </p>
-      <p className="mb-4 text-xl md:text-2xl">
-        + Transparencia y honestidad en la comunicación:
+      <p className="mb-4 text-xl md:text-2xl flex flex-row">
+        <LuMessagesSquare className="text-3xl text-blue-600" /> Transparencia y
+        honestidad en la comunicación:
       </p>
       <p className="mb-8 text-xl md:text-lg">
-        reemos en la comunicación abierta y honesta. Nuestros clientes pueden
+        Creemos en la comunicación abierta y honesta. Nuestros clientes pueden
         confiar en nosotros para proporcionar estimaciones precisas y cumplir
         con los plazos acordados.
       </p>
@@ -178,11 +204,15 @@ const ContentTwo: React.FC = () => (
 
 const ContentTree: React.FC = () => (
   <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
-    <h2 className="col-span-1 text-3xl font-bold md:col-span-4">
-      ¡Gracias por considerar Construcciones Menores para su próximo proyecto!
-    </h2>
+    <div className="col-span-1 text-3xl font-bold md:col-span-4">
+      <h2 className="col-span-1 text-3xl font-bold md:col-span-4">
+        ¡Gracias por considerar Construcciones Menores para su próximo proyecto!
+      </h2>
+      <FaGratipay className="text-9xl text-red-700 md:mt-5 md:ml-6" />
+    </div>
     <div className="col-span-1 md:col-span-8">
-      <p className="mb-4 text-xl md:text-2xl">
+      <p className="mb-4 text-xl md:text-2xl flex felx-row">
+        <TbZoomScan className="text-4xl text-blue font-bold" />
         Queremos ser reconocidos como líderes en la industria de la
         construcción.
       </p>

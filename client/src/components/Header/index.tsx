@@ -10,10 +10,10 @@ import ThemeToggler from "./ThemeToggler";
 import MenuData from "./menuData";
 import { UserOutlined } from "@ant-design/icons";
 import DropdownUser from "../Header-Dashboard/DropdownUser";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "@/hooks/useStore";
 
 const Header = () => {
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
@@ -32,7 +32,6 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
 
-  // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index: any) => {
     if (openIndex === index) {
@@ -151,6 +150,12 @@ const Header = () => {
                     )}
                   </li>
                 ))}
+                <Link href="/home/signin" className="md:hidden block mb-2 mt-1">
+                  INICIAR SESION
+                </Link>
+                <Link href="/home/signup" className="md:hidden block">
+                  REGISTRARCE
+                </Link>
               </ul>
             </nav>
           </div>

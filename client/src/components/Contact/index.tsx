@@ -1,10 +1,21 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { useForm } from "@/hooks/useForm";
+import axios from "axios";
 
 const Contact = () => {
   const mapRef = useRef(null);
+  const { form, handleChange } = useForm({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const { name, email, message } = form;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -27,13 +38,34 @@ const Contact = () => {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
-
     return () => {
       map.remove();
     };
   }, []);
-  const onSubmit = (e: React.FormEvent) => {
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!name || !email || !message) {
+      setErrorMessage("Por favor, completa todos los campos.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const response = await axios.post("URL_API", form);
+
+      setErrorMessage("");
+      alert("Mensaje enviado exitosamente!");
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Hubo un error al enviar el formulario.");
+    } finally {
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 60000);
+    }
   };
 
   return (
@@ -65,7 +97,10 @@ const Contact = () => {
                       </label>
                       <input
                         type="text"
+                        name="name"
                         placeholder="Escribe tu nombre"
+                        value={name}
+                        onChange={handleChange}
                         className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       />
                     </div>
@@ -80,7 +115,10 @@ const Contact = () => {
                       </label>
                       <input
                         type="email"
+                        name="email"
                         placeholder="Escribe tu correo"
+                        value={email}
+                        onChange={handleChange}
                         className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       />
                     </div>
@@ -97,6 +135,8 @@ const Contact = () => {
                         name="message"
                         rows={5}
                         placeholder="Escribe tu inquietud"
+                        value={message}
+                        onChange={handleChange}
                         className="border-stroke w-full resize-none rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       ></textarea>
                     </div>
@@ -104,12 +144,14 @@ const Contact = () => {
                   <div className="w-full px-4">
                     <button
                       type="submit"
+                      disabled={isSubmitting}
                       className="rounded-full bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark"
                     >
                       Enviar feedback
                     </button>
                   </div>
                 </div>
+                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               </form>
             </div>
           </div>

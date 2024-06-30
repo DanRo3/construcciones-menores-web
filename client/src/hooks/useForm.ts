@@ -1,11 +1,9 @@
-'use client';
 import { useState, ChangeEvent } from "react";
 
-
-export function useForm<T extends Object> (initState: T) {
+export function useForm<T extends Record<string, string | number>>(initState: T) {
   const [form, setForm] = useState(initState);
 
-  const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = target;
 
     setForm((prevForm) => ({
@@ -18,4 +16,4 @@ export function useForm<T extends Object> (initState: T) {
     form,
     handleChange,
   };
-};
+}
