@@ -17,7 +17,7 @@ const Signin = () => {
 
   const { form, handleChange } = useForm({
     email: "daniel@gamil.com",
-    pass: "12345",
+    pass: "asSSWSdbfWEDeqweq782183787",
   });
 
   const { email, pass } = form;
@@ -28,9 +28,9 @@ const Signin = () => {
     // dispatch(login(email, pass));
     openNotification(
       "success",
-      "Éxito",
+      "Correcto",
       "Usted se ha autenticado correctamente.",
-      <MdOutlineTaskAlt className="text-green-500" />
+      <MdOutlineTaskAlt className="text-green-500 text-3xl" />
     );
     dispatch(MetaAuth());
     router.push("/home", { scroll: true });

@@ -6,7 +6,7 @@ export const openNotification = (
   message: string,
   description: string,
   icon?: ReactNode,
-  duration: number = 2.5,
+  duration: number = 1.8,
   placement: "topLeft" | "topRight" | "bottomLeft" | "bottomRight" = "topRight"
 ) => {
   notification[type]({

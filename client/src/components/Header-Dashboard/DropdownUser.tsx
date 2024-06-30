@@ -3,14 +3,22 @@ import Link from "next/link";
 import Image from "next/image";
 import ClickOutside from "@/components/ClickOutside";
 import user from "../../../public/images/admin/user.png";
-import { useDispatch } from "react-redux";
 import { signOut } from "@/redux/actions/auth";
+import { useAppDispatch } from "@/hooks/useStore";
+import { MdOutlineTaskAlt } from "react-icons/md";
+import { openNotification } from "../Common/Notification";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleSingOut = () => {
     dispatch(signOut());
+    openNotification(
+      "success",
+      "Correcto",
+      "Usted se ha cerrado seción correctamente.",
+      <MdOutlineTaskAlt className="text-green-500 text-3xl" />
+    );
   };
 
   return (
