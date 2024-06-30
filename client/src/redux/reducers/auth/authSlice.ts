@@ -1,38 +1,57 @@
-
-import { User } from '@/types/interfaces';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from "@/types/interfaces";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
+  user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
-  user: User; 
+  loading: boolean;
+  error: string | null;
 }
 
 const initialState: AuthState = {
-  isAuthenticated: true,
-  user: {
-    "id": 171717,
-    'name':'DanRo',
-    "email":"drgrassnk445@gmail.com"
-  },
+  user: JSON.parse(localStorage.getItem('user') || 'null'),
+  token: localStorage.getItem('token'),
+  isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
+  loading: false,
+  error: null,
 };
 
-export const AuthSlice = createSlice({
-  name: 'auth',
+const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
-    loginSuccess(state, action: PayloadAction<any>) {
+    authStart(state) {
+      state.loading = true;
+      state.error = null;
+    },
+    authSuccess(state, action: PayloadAction<{ token: string; user: User }>) {
+      state.loading = false;
+      state.token = action.payload.token;
+      state.user = action.payload.user;
       state.isAuthenticated = true;
-      state.user = action.payload;
+      localStorage.setItem('token', action.payload.token);
+      localStorage.setItem('user', JSON.stringify(action.payload.user));
+      localStorage.setItem('isAuthenticated', 'true');
+    },
+    authSDevelopment(state){
+      state.isAuthenticated = true;
+      localStorage.setItem('isAuthenticated', 'true');
+    },
+    authFailure(state, action: PayloadAction<string>) {
+      state.loading = false;
+      state.error = action.payload;
     },
     logout(state) {
+      state.token = null;
+      state.user = null;
       state.isAuthenticated = false;
-      state.user = {"id": 0,
-    'name':'',
-    "email":""};
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('isAuthenticated');
     },
   },
 });
 
-export const { loginSuccess, logout } = AuthSlice.actions;
-
-export default AuthSlice.reducer;
+export const { authStart, authSuccess, authFailure, logout, authSDevelopment } = authSlice.actions;
+export default authSlice.reducer;

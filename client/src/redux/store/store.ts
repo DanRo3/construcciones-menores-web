@@ -1,15 +1,35 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
 import AuthReducer from '../reducers/auth/authSlice';
 import serviceSlice from '../reducers/homeReducers/servicios/serviceSlice';
 import productSlice from '../reducers/homeReducers/products/productSlice';
 
-export const store = configureStore({
-  reducer: {
-    auth: AuthReducer,
-    serviceClient: serviceSlice,
-    productClient: productSlice,
-  },
+const preloadedState = {
+  auth: {
+    user: JSON.parse(localStorage.getItem('user') || 'null'),
+    token: localStorage.getItem('token'),
+    isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
+    loading: false,
+    error: null,
+  }
+};
+
+const reducers = combineReducers({
+  auth: AuthReducer,
+  serviceClient: serviceSlice,
+  productClient: productSlice,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const store = configureStore({
+  reducer: reducers,
+  preloadedState,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      thunk: true,
+      serializableCheck: false,
+    }),
+});
+
+export type AppStore = typeof store;
+export type AppState = ReturnType<AppStore['getState']>;
+export type AppDispatch = AppStore['dispatch'];
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>;

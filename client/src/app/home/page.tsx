@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import Presentation from '../../components/Presentation/index';
+import Presentation from "../../components/Presentation/index";
 import Mision from "@/components/Mision";
 import Servicios from "@/components/Servicios";
 import NewsLatterBox from "@/components/Contact/SubscriptionBox";
@@ -12,7 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  
   return (
     <>
       <Presentation />

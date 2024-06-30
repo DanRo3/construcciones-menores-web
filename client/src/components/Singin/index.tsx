@@ -1,40 +1,41 @@
 "use client";
 import { useForm } from "@/hooks/useForm";
-import { useDispatch } from "react-redux";
-import { loginSuccess } from "../../redux/reducers/auth/authSlice";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { FormEvent } from "react";
+import { AppDispatch, AppState } from "@/redux/store/store";
+import { MetaAuth, login } from "@/redux/actions/auth";
+import { authSuccess } from "@/redux/reducers/auth/authSlice";
+import { openNotification } from "../Common/Notification";
+import { MdOutlineTaskAlt } from "react-icons/md";
+import { useAppSelector } from "@/hooks/useStore";
 
 const Signin = () => {
   const router = useRouter();
+  const dispatch: AppDispatch = useDispatch();
+  const { loading, error } = useSelector((state: AppState) => state.auth);
+
   const { form, handleChange } = useForm({
-    email: "user@gmail.com",
-    pass: "123456",
+    email: "daniel@gamil.com",
+    pass: "12345",
   });
 
   const { email, pass } = form;
+  const state = useAppSelector((state: AppState) => state);
 
-  const handleSignin = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(form);
-
-    router.push("/home");
-
-    // const response = await axios.post('/api/auth/signin',credentials)
-    // console.log(response)
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    // dispatch(login(email, pass));
+    openNotification(
+      "success",
+      "Éxito",
+      "Usted se ha autenticado correctamente.",
+      <MdOutlineTaskAlt className="text-green-500" />
+    );
+    dispatch(MetaAuth());
+    router.push("/home", { scroll: true });
+    console.log(state);
   };
-
-  // const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //     event.preventDefault();
-  //     try {
-  //       const response = await axios.post('URL_DEL_LOGIN_ENDPOINT', { username, password });
-  //       dispatch(loginSuccess(response.data));
-  //     } catch (error) {
-  //       console.error('Error al iniciar sesión:', error);
-  //     }
-  // };
 
   return (
     <div>
@@ -55,7 +56,7 @@ const Signin = () => {
                 </p>
                 <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
               </div>
-              <form onSubmit={handleSignin}>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-8">
                   <label
                     htmlFor="email"
@@ -138,9 +139,11 @@ const Signin = () => {
                   <button
                     className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-full bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
                     type="submit"
+                    disabled={loading}
                   >
-                    Iniciar sesión
+                    {loading ? "Comprobando credenciales..." : "Iniciar sesión"}
                   </button>
+                  {error && <p>{error}</p>}
                 </div>
               </form>
               <p className="text-center text-base font-medium text-body-color">

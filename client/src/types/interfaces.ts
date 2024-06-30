@@ -52,11 +52,11 @@ export type ModalDataType = {
 
 export type ExtendedModalDataType = ModalDataType & { type?: string;url?: string;} & Pedido
 
-export interface ServiceValues {
-  InputNumber: number; 
-  TreeSelect: string; 
-  TextArea: string; 
-  RangePicker: [Date | null, Date | null];
+export interface PedidoForm {
+  phone: number; 
+  municipio: string; 
+  descripcion: string; 
+  dateRange: [Date | null, Date | null];
 }
 
 export interface User {
@@ -65,4 +65,5 @@ export interface User {
   email: string;
   profileImage?: string;
   phoneNumber?: number;
+  rol:string;
 }

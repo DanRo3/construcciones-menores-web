@@ -10,17 +10,15 @@ import ThemeToggler from "./ThemeToggler";
 import MenuData from "./menuData";
 import { UserOutlined } from "@ant-design/icons";
 import DropdownUser from "../Header-Dashboard/DropdownUser";
+import { useSelector } from "react-redux";
 
 const Header = () => {
-  // Navbar toggle
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
   };
 
-  const userLogged = false;
-
-  // Sticky Navbar
   const [sticky, setSticky] = useState(false);
   const handleStickyNavbar = () => {
     if (window.scrollY >= 80) {
@@ -156,7 +154,7 @@ const Header = () => {
               </ul>
             </nav>
           </div>
-          {userLogged ? (
+          {isAuthenticated ? (
             <div className="flex items-center justify-end pr-16 lg:pr-0 m-1">
               <DropdownUser />
               <div>

@@ -1,10 +1,9 @@
 "use client";
 import { useRef, useState } from "react";
 import { motion, useTransform, useScroll } from "framer-motion";
-import { CardProps, ServiceValues, Servicio } from "@/types/interfaces";
+import { CardProps, PedidoForm, Servicio } from "@/types/interfaces";
 import { useModal } from "../Common/ContextModal";
 import dayjs from "dayjs";
-
 import {
   Modal,
   Button,
@@ -95,7 +94,7 @@ const Servicios: React.FC = () => {
     setValue(newValue);
   };
 
-  const handleSubmit = (values: ServiceValues) => {
+  const handleSubmit = (values: PedidoForm) => {
     console.log(values);
   };
 
@@ -122,7 +121,7 @@ const Servicios: React.FC = () => {
           <Form variant="filled" onFinish={handleSubmit}>
             <Form.Item
               label=""
-              name="InputNumber"
+              name="phone"
               rules={[
                 {
                   required: true,
@@ -138,7 +137,7 @@ const Servicios: React.FC = () => {
 
             <Form.Item
               label=""
-              name="TreeSelect"
+              name="municipio"
               rules={[
                 {
                   required: true,
@@ -159,7 +158,7 @@ const Servicios: React.FC = () => {
 
             <Form.Item
               label=""
-              name="TextArea"
+              name="descripcion"
               rules={[
                 { required: true, message: "Por favor escribe una referencia" },
               ]}
@@ -169,7 +168,7 @@ const Servicios: React.FC = () => {
 
             <Form.Item
               label=""
-              name="RangePicker"
+              name="dateRange"
               rules={[
                 { required: true, message: "Selecciona un rango de días" },
               ]}

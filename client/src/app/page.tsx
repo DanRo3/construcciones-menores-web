@@ -1,3 +1,4 @@
+import Outled from "@/components/Common/Outled";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -6,5 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default function Inicio() {
-  return <></>;
+  return (
+    <>
+      <Outled />
+    </>
+  );
 }
