@@ -16,7 +16,7 @@ const DropdownUser = () => {
     openNotification(
       "success",
       "Correcto",
-      "Usted se ha cerrado seción correctamente.",
+      "Usted se ha cerrado sesión correctamente.",
       <MdOutlineTaskAlt className="text-green-500 text-3xl" />
     );
   };

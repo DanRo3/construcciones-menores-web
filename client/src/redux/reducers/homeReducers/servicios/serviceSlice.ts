@@ -25,7 +25,7 @@ const initialState: ServiceState = {
       url: "https://media.istockphoto.com/id/1083735696/es/foto/perito-en-casco-y-chaqueta-de-alta-visibilidad-con-tableta-digital-realizando-inspecci%C3%B3n-de.jpg?s=612x612&w=0&k=20&c=iXRH7zHgmMuCGr4vMYAecxzEbXXkVh8fa9q876sprzw=",
       title: "Servicio de defectación",
       price: 20,
-      description: "Pintura para interiores y fachadas",
+      description: "Revisión de estructuras y muros",
       id: 3,
     },
   ],

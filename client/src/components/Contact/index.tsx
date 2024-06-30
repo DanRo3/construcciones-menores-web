@@ -32,6 +32,10 @@ const Contact = () => {
       map.remove();
     };
   }, []);
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+  };
+
   return (
     <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
       <div className="container">
@@ -49,7 +53,7 @@ const Contact = () => {
                 Nuestro equipo de soporte se comunicará con usted lo antes
                 posible por correo electrónico.
               </p>
-              <form>
+              <form onSubmit={onSubmit}>
                 <div className="-mx-4 flex flex-wrap">
                   <div className="w-full px-4 md:w-1/2">
                     <div className="mb-8">
@@ -98,7 +102,10 @@ const Contact = () => {
                     </div>
                   </div>
                   <div className="w-full px-4">
-                    <button className="rounded-full bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark">
+                    <button
+                      type="submit"
+                      className="rounded-full bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark"
+                    >
                       Enviar feedback
                     </button>
                   </div>
@@ -114,7 +121,12 @@ const Contact = () => {
                 className="shadow-xl"
                 id="map"
                 ref={mapRef}
-                style={{ height: "625px", width: "350px", borderRadius: "8px" }}
+                style={{
+                  height: "625px",
+                  width: "350px",
+                  borderRadius: "8px",
+                  zIndex: "-1",
+                }}
               />
             </div>
           </div>

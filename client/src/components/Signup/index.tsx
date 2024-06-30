@@ -6,7 +6,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    numberPhone: "",
+    numberPhone: 0,
     password: "",
     confirmPassword: "",
     termsAccepted: false,
@@ -52,6 +52,13 @@ const Signup = () => {
       return;
     }
 
+    if (formData.numberPhone < 50000000 || formData.numberPhone > 63999999) {
+      const errorMessage = "El número de teléfono celular no es válido";
+      setError(errorMessage);
+      console.error(errorMessage);
+      return;
+    }
+
     if (!formData.termsAccepted) {
       const errorMessage =
         "Debes aceptar los términos y condiciones para continuar.";
@@ -62,6 +69,7 @@ const Signup = () => {
 
     setLoading(true);
     setError(null);
+    console.log(formData);
 
     try {
       const response = await fetch("urlApi", {
@@ -82,7 +90,7 @@ const Signup = () => {
       setFormData({
         name: "",
         email: "",
-        numberPhone: "",
+        numberPhone: 0,
         password: "",
         confirmPassword: "",
         termsAccepted: false,
