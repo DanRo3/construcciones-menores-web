@@ -1,16 +1,12 @@
-import Outled from "@/components/Common/Outled";
-import { Card } from "@/components/Servicios/card";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Inicio | Construcciones Menores",
-  description: "Pagina de inicio de Construcciones Menores",
-};
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Inicio() {
-  return (
-    <>
-      <Outled />
-    </>
-  );
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/home");
+  }, [router]);
+  return <></>;
 }

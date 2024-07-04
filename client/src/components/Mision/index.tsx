@@ -1,6 +1,12 @@
 "use client";
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import {
+  motion,
+  useAnimation,
+  useScroll,
+  useTransform,
+  useViewportScroll,
+} from "framer-motion";
 import { MdOutlineEqualizer, MdSavings } from "react-icons/md";
 import {
   LuCheckCircle,
@@ -9,36 +15,102 @@ import {
 } from "react-icons/lu";
 import { BsShieldCheck } from "react-icons/bs";
 import { FaGratipay } from "react-icons/fa";
-import { TfiStatsUp } from "react-icons/tfi";
 import { TbZoomScan } from "react-icons/tb";
+import { useInView } from "react-intersection-observer";
 
 interface MisionProps {}
 
 const Mision: React.FC<MisionProps> = () => {
+  const { scrollYProgress } = useViewportScroll();
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.5]);
+
+  const { inView: inView1, ref: ref1 } = useInView({ threshold: 0.1 });
+  const { inView: inView2, ref: ref2 } = useInView({ threshold: 0.1 });
+  const { inView: inView3, ref: ref3 } = useInView({ threshold: 0.1 });
+
+  const animation1 = useAnimation();
+  const animation2 = useAnimation();
+  const animation3 = useAnimation();
+
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+  });
+
+  useEffect(() => {
+    if (inView1) {
+      animation1.start("visible");
+    }
+  }, [animation1, inView1]);
+
+  useEffect(() => {
+    if (inView2) {
+      animation2.start("visible");
+    }
+  }, [animation2, inView2]);
+
+  useEffect(() => {
+    if (inView3) {
+      animation3.start("visible");
+    }
+  }, [animation3, inView3]);
+
   return (
     <section id="mision" className="">
       <div className="mt-40 md:mt-0">
-        <TextParallaxContent
-          imgUrl="https://cdn.pixabay.com/photo/2020/09/18/21/53/architecture-5583025_1280.jpg"
-          subheading="Nuestros valores"
-          heading="Buscan un cliente satisfecho"
+        <motion.div
+          ref={ref1}
+          initial="hidden"
+          animate={animation1}
+          variants={{
+            hidden: { opacity: 0, scale: 0.9 },
+            visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+          }}
+          className="mt-40 md:mt-0"
         >
-          <ContentOne />
-        </TextParallaxContent>
-        <TextParallaxContent
-          imgUrl="https://cdn.pixabay.com/photo/2017/07/09/03/19/home-2486092_640.jpg"
-          subheading="Calidad"
-          heading="A la mano de la comunicación"
+          <TextParallaxContent
+            imgUrl="https://cdn.pixabay.com/photo/2020/09/18/21/53/architecture-5583025_1280.jpg"
+            subheading="Nuestros valores"
+            heading="Buscan un cliente satisfecho"
+          >
+            <ContentOne />
+          </TextParallaxContent>
+        </motion.div>
+        <motion.div
+          ref={ref2}
+          initial="hidden"
+          animate={animation2}
+          variants={{
+            hidden: { opacity: 0, scale: 0.9 },
+            visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+          }}
+          className="mt-40 md:mt-0"
         >
-          <ContentTwo />
-        </TextParallaxContent>
-        <TextParallaxContent
-          imgUrl="https://cdn.pixabay.com/photo/2024/05/14/05/38/builder-8760328_640.jpg"
-          subheading="Nuestra Visión"
-          heading="Construir el futuro junto a ti"
+          <TextParallaxContent
+            imgUrl="https://cdn.pixabay.com/photo/2017/07/09/03/19/home-2486092_640.jpg"
+            subheading="Calidad"
+            heading="A la mano de la comunicación"
+          >
+            <ContentTwo />
+          </TextParallaxContent>
+        </motion.div>
+        <motion.div
+          ref={ref3}
+          initial="hidden"
+          animate={animation3}
+          variants={{
+            hidden: { opacity: 0, scale: 0.9 },
+            visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
+          }}
+          className="mt-40 md:mt-0"
         >
-          <ContentTree />
-        </TextParallaxContent>
+          <TextParallaxContent
+            imgUrl="https://cdn.pixabay.com/photo/2024/05/14/05/38/builder-8760328_640.jpg"
+            subheading="Nuestra Visión"
+            heading="Construir el futuro junto a ti"
+          >
+            <ContentThree />
+          </TextParallaxContent>
+        </motion.div>
       </div>
     </section>
   );
@@ -202,7 +274,7 @@ const ContentTwo: React.FC = () => (
   </div>
 );
 
-const ContentTree: React.FC = () => (
+const ContentThree: React.FC = () => (
   <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
     <div className="col-span-1 text-3xl font-bold md:col-span-4">
       <h2 className="col-span-1 text-3xl font-bold md:col-span-4">

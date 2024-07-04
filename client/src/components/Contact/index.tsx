@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useForm } from "@/hooks/useForm";
 import axios from "axios";
+import { message } from "antd"; // Importar el componente message
 
 const Contact = () => {
   const mapRef = useRef(null);
@@ -13,9 +14,8 @@ const Contact = () => {
     message: "",
   });
 
-  const { name, email, message } = form;
+  const { name, email, message: userMessage } = form;
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -38,6 +38,7 @@ const Contact = () => {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
+
     return () => {
       map.remove();
     };
@@ -46,8 +47,8 @@ const Contact = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !email || !message) {
-      setErrorMessage("Por favor, completa todos los campos.");
+    if (!name || !email || !userMessage) {
+      message.error("Por favor, completa todos los campos."); // Mostrar mensaje de error
       return;
     }
 
@@ -56,11 +57,10 @@ const Contact = () => {
     try {
       const response = await axios.post("URL_API", form);
 
-      setErrorMessage("");
-      alert("Mensaje enviado exitosamente!");
+      message.success("Mensaje enviado exitosamente!"); // Mostrar mensaje de éxito
     } catch (error) {
       console.error(error);
-      setErrorMessage("Hubo un error al enviar el formulario.");
+      message.error("Hubo un error al enviar el formulario."); // Mostrar mensaje de error
     } finally {
       setTimeout(() => {
         setIsSubmitting(false);
@@ -75,8 +75,7 @@ const Contact = () => {
           <div className="w-full px-4 lg:w-7/12 xl:w-8/12">
             <div
               className="mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:shadow-none dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
-              data-wow-delay=".15s
-              "
+              data-wow-delay=".15s"
             >
               <h2 className="mb-3 text-2xl font-bold text-black dark:text-white sm:text-3xl lg:text-2xl xl:text-3xl">
                 ¿Necesitas ayuda? Contáctanos
@@ -135,7 +134,7 @@ const Contact = () => {
                         name="message"
                         rows={5}
                         placeholder="Escribe tu inquietud"
-                        value={message}
+                        value={userMessage}
                         onChange={handleChange}
                         className="border-stroke w-full resize-none rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       ></textarea>
@@ -151,7 +150,6 @@ const Contact = () => {
                     </button>
                   </div>
                 </div>
-                {errorMessage && <p className="text-red-500">{errorMessage}</p>}
               </form>
             </div>
           </div>

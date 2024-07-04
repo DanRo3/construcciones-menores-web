@@ -5,7 +5,7 @@ import productSlice from '../reducers/homeReducers/products/productSlice';
 
 const preloadedState = {
   auth: {
-    user: JSON.parse(localStorage.getItem('user') || 'null'),
+    user:  null,
     token: localStorage.getItem('token'),
     isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
     loading: false,

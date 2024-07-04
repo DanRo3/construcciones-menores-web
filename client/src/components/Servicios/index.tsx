@@ -17,12 +17,12 @@ import {
   Input,
   InputNumber,
   TreeSelect,
+  message,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { municipios } from "./dataMunicipios";
 import { useAppSelector } from "@/hooks/useStore";
 import { FiAlertCircle } from "react-icons/fi";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 
 const { RangePicker } = DatePicker;
@@ -166,16 +166,34 @@ const SpringModal = ({
 const Servicios: React.FC = () => {
   const { isVisible, modalData, closeModal } = useModal();
   const [value, setValue] = useState<string>();
-
   const [form] = useForm();
 
   const onChange = (newValue: string) => {
-    console.log(newValue);
     setValue(newValue);
   };
 
-  const handleSubmit = (values: PedidoForm) => {
-    console.log(values);
+  const handleSubmit = async (values: PedidoForm) => {
+    try {
+      const response = await fetch("/api/solicitud", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit request");
+      }
+
+      const data = await response.json();
+      message.success("Solicitud enviada exitosamente");
+      closeModal();
+    } catch (error) {
+      console.log(values);
+      message.error("Hubo un problema al enviar la solicitud");
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -198,7 +216,7 @@ const Servicios: React.FC = () => {
           }}
           footer={[]}
         >
-          <Form variant="filled" onFinish={handleSubmit}>
+          <Form form={form} onFinish={handleSubmit}>
             <Form.Item
               label=""
               name="phone"
@@ -255,8 +273,14 @@ const Servicios: React.FC = () => {
             >
               <RangePicker
                 className="z-999999"
-                minDate={dayjs()}
-                maxDate={dayjs().add(30, "day")}
+                disabledDate={(current) => {
+                  // No puede seleccionar fechas antes de hoy ni más allá de 30 días
+                  return (
+                    current &&
+                    (current < dayjs().endOf("day") ||
+                      current > dayjs().add(30, "day").endOf("day"))
+                  );
+                }}
               />
             </Form.Item>
 
@@ -267,17 +291,11 @@ const Servicios: React.FC = () => {
                 gap: "10px",
               }}
             >
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ marginRight: "10px" }}
-              >
+              <Button htmlType="submit" style={{ marginRight: "10px" }}>
                 Enviar
               </Button>
 
-              <Button type="default" onClick={closeModal}>
-                Cancelar
-              </Button>
+              <Button onClick={closeModal}>Cancelar</Button>
             </Form.Item>
           </Form>
         </Modal>

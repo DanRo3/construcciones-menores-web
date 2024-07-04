@@ -1,17 +1,9 @@
 "use client";
-import { useAppSelector } from "@/hooks/useStore";
-import { AppState } from "@/redux/store/store";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-const Outled = () => {
-  const isAuthenticated = useAppSelector(
-    (state: AppState) => state.auth.isAuthenticated
-  );
-
-  if (!isAuthenticated) {
-    redirect("/home");
-  }
+const OutledOne = () => {
   return <></>;
 };
 
-export default Outled;
+export default OutledOne;
