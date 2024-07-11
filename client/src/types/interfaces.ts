@@ -2,7 +2,7 @@ export interface CardProps {
   card:{
     url: string;
     title: string;
-    price: number;
+    price: string;
     description?: string;
     id: number;
   }
@@ -21,7 +21,7 @@ export interface Feedback {
 export interface Producto {
     url: string;
     title: string;
-    price: number;
+    price: string;
     id: number;
 }
 
@@ -36,11 +36,11 @@ export interface Pedido {
 }
 
 export interface Servicio {
-    url: string;
-    title: string;
-    price: number;
-    description:string;
-    id: number;
+  id: string,
+  title: string,
+  price: string,
+  description:string,
+  url: string,
 }
 
 export type ModalDataType = {
@@ -50,12 +50,24 @@ export type ModalDataType = {
   id?:number
 };
 
-export type ExtendedModalDataType = ModalDataType & { type?: string;url?: string;} & Pedido
+export type ExtendedModalDataType = ModalDataType & { type?: string;url?: string;} & Pedido & {
+  url?: string;
+  title?: string;
+  price?: number;
+  description?: string;
+  id: number;
+  service?: string;
+  customerName?: string;
+  phoneNumber?: number;
+  addressDescription?: string;
+  dateRange?: [string, string];
+}
+
 
 export interface PedidoForm {
-  phone: number; 
-  municipio: string; 
-  descripcion: string; 
+  phoneNumber: number | undefined;
+  municipio: string;
+  descripcion: string;
   dateRange: [Date | null, Date | null];
 }
 

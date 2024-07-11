@@ -1,6 +1,5 @@
 import BreadcrumbDS from "@/components/Common/BreadcrumbDS";
 import AdminPedidos from "@/components/Dashboard/AdminPedidos";
-import TableCrud from "@/components/Tables/TableCrud";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

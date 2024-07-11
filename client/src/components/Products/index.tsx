@@ -1,12 +1,34 @@
 "use client";
-import { useAppSelector } from "@/hooks/useStore";
+import { useEffect, useState } from "react";
 import { CardProps, Producto } from "@/types/interfaces";
-import Image from "next/image";
 
 const Produts = () => {
-  const cardsProducts: Producto[] = useAppSelector(
-    (state) => state.productClient.products
-  );
+  const [cardsProducts, setCardsProducts] = useState<Producto[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:1338/productos");
+        const data = await response.json();
+        if (data.status === "success") {
+          const products = data.product.map((prod: any) => ({
+            url: prod.imgpath,
+            title: prod.name,
+            price: prod.price,
+            id: prod.id,
+          }));
+          setCardsProducts(products);
+        } else {
+          console.error("Failed to fetch products");
+        }
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="py-6 sm:py-8 lg:py-12">
       <div className="flex w-full text-center items-center justify-center mb-10">

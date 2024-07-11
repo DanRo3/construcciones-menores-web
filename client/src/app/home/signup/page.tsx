@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Metadata } from "next";
 import Singup from "@/components/Signup";
+import AuthRedirect from "@/components/Common/Midlewares/Redirect";
 
 export const metadata: Metadata = {
   title: "Crear cuenta | Construcciones Menores",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 const SignupPage = () => {
   return (
     <>
+      <AuthRedirect />
       <Singup />
     </>
   );

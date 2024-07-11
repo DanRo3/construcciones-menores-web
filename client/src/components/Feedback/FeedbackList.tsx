@@ -12,7 +12,7 @@ import {
   Divider,
 } from "antd";
 import { Feedback } from "@/types/interfaces";
-import { DeleteOutlined, MessageOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { BsSendFill } from "react-icons/bs";
 
 const columns = [
@@ -69,13 +69,13 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ feedbacks, onSelect }) => {
 
   const handleRowClick = (record: Feedback, rowIndex: number) => {
     setSelectedFeedback(record);
-    setShowResponseForm(true); // Muestra el formulario de respuesta
+    setShowResponseForm(true);
   };
 
   const handleResponseSubmit = () => {
     // Lógica para enviar la respuesta
     console.log("Responder feedback:", selectedFeedback);
-    setShowResponseForm(false); // Oculta el formulario después de enviar
+    setShowResponseForm(false);
   };
 
   return (

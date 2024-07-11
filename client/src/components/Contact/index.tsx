@@ -9,12 +9,12 @@ import { message } from "antd"; // Importar el componente message
 const Contact = () => {
   const mapRef = useRef(null);
   const { form, handleChange } = useForm({
-    name: "",
+    user_name: "",
     email: "",
-    message: "",
+    UserMessage: "",
   });
 
-  const { name, email, message: userMessage } = form;
+  const { user_name, email, UserMessage } = form;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const Contact = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !email || !userMessage) {
+    if (!user_name || !email || !UserMessage) {
       message.error("Por favor, completa todos los campos."); // Mostrar mensaje de error
       return;
     }
@@ -55,12 +55,16 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("URL_API", form);
+      const response = await axios.post("http://localhost:1338/feedback", {
+        user_name: user_name,
+        email: email,
+        message: UserMessage,
+      });
 
-      message.success("Mensaje enviado exitosamente!"); // Mostrar mensaje de éxito
+      message.success("Mensaje enviado exitosamente!");
     } catch (error) {
       console.error(error);
-      message.error("Hubo un error al enviar el formulario."); // Mostrar mensaje de error
+      message.error("Hubo un error al enviar el formulario.");
     } finally {
       setTimeout(() => {
         setIsSubmitting(false);
@@ -96,9 +100,9 @@ const Contact = () => {
                       </label>
                       <input
                         type="text"
-                        name="name"
+                        name="user_name"
                         placeholder="Escribe tu nombre"
-                        value={name}
+                        value={user_name}
                         onChange={handleChange}
                         className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       />
@@ -131,10 +135,10 @@ const Contact = () => {
                         Mensaje
                       </label>
                       <textarea
-                        name="message"
+                        name="UserMessage"
                         rows={5}
                         placeholder="Escribe tu inquietud"
-                        value={userMessage}
+                        value={UserMessage}
                         onChange={handleChange}
                         className="border-stroke w-full resize-none rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       ></textarea>

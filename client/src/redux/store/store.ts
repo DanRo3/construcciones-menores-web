@@ -1,35 +1,14 @@
-import { configureStore, ThunkAction, Action, combineReducers } from '@reduxjs/toolkit';
-import AuthReducer from '../reducers/auth/authSlice';
-import serviceSlice from '../reducers/homeReducers/servicios/serviceSlice';
-import productSlice from '../reducers/homeReducers/products/productSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "../slices/authSlice";
 
-const preloadedState = {
-  auth: {
-    user:  null,
-    token: localStorage.getItem('token'),
-    isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
-    loading: false,
-    error: null,
-  }
-};
-
-const reducers = combineReducers({
-  auth: AuthReducer,
-  serviceClient: serviceSlice,
-  productClient: productSlice,
+const store = configureStore({
+  reducer: {
+    auth: authReducer,
+  },
 });
 
-export const store = configureStore({
-  reducer: reducers,
-  preloadedState,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      thunk: true,
-      serializableCheck: false,
-    }),
-});
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-export type AppStore = typeof store;
-export type AppState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>;
+export default store;
+

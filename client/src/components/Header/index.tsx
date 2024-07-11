@@ -10,10 +10,19 @@ import ThemeToggler from "./ThemeToggler";
 import MenuData from "./menuData";
 import { UserOutlined } from "@ant-design/icons";
 import DropdownUser from "../Header-Dashboard/DropdownUser";
-import { useAppSelector } from "@/hooks/useStore";
 
 const Header = () => {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = () => {
+    if (typeof window !== "undefined") {
+      const authData = localStorage.getItem("userData");
+      if (authData) {
+        const parsedData = JSON.parse(authData);
+        return parsedData && parsedData.status === "success";
+      }
+    }
+    return false;
+  };
+
   const [navbarOpen, setNavbarOpen] = useState(false);
   const navbarToggleHandler = () => {
     setNavbarOpen(!navbarOpen);
@@ -30,7 +39,8 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
-  });
+    return () => window.removeEventListener("scroll", handleStickyNavbar);
+  }, []);
 
   const [openIndex, setOpenIndex] = useState(-1);
   const handleSubmenu = (index: any) => {
@@ -59,7 +69,7 @@ const Header = () => {
                 href="/home"
                 className={`header-logo  w-full flex flex-row items-center ${
                   sticky ? "py-5 lg:py-2" : "py-8"
-                } `}
+                }`}
               >
                 <Image
                   src={Logo2}
@@ -150,16 +160,25 @@ const Header = () => {
                     )}
                   </li>
                 ))}
-                <Link href="/home/signin" className="md:hidden block mb-2 mt-1">
-                  INICIAR SESION
-                </Link>
-                <Link href="/home/signup" className="md:hidden block">
-                  REGISTRARCE
-                </Link>
+                {!isAuthenticated() ? (
+                  <div>
+                    <Link
+                      href="/home/signin"
+                      className="md:hidden block mb-2 mt-1"
+                    >
+                      INICIAR SESION
+                    </Link>
+                    <Link href="/home/signup" className="md:hidden block">
+                      REGISTRARCE
+                    </Link>
+                  </div>
+                ) : (
+                  <></>
+                )}
               </ul>
             </nav>
           </div>
-          {isAuthenticated ? (
+          {isAuthenticated() ? (
             <div className="flex items-center justify-end pr-16 lg:pr-0 m-1">
               <DropdownUser />
               <div>

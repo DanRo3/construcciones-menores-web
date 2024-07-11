@@ -1,18 +1,26 @@
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { FaCircleUser } from "react-icons/fa6";
 import ClickOutside from "@/components/ClickOutside";
-import user from "../../../public/images/admin/user.png";
-import { signOut } from "@/redux/actions/auth";
-import { useAppDispatch } from "@/hooks/useStore";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { openNotification } from "../Common/Notification";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/hooks/useStore";
+import { logout } from "@/redux/slices/authSlice";
+import { RootState } from "@/redux/store/store";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const router = useRouter();
+  const userEmail = useAppSelector(
+    (state: RootState) => state.auth.user?.username
+  );
+  const userRole = useAppSelector((state: RootState) => state.auth.user);
+  console.log(userRole);
   const handleSingOut = () => {
-    dispatch(signOut());
+    dispatch(logout());
+    router.push("/home");
     openNotification(
       "success",
       "Correcto",
@@ -28,18 +36,8 @@ const DropdownUser = () => {
         className="flex items-center"
         href="#"
       >
-        <span className="h-12 w-12 rounded-full">
-          <Image
-            width={120}
-            height={120}
-            src={user}
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
-            alt="User"
-            className="overflow-hidden rounded-full"
-          />
+        <span className="h-full">
+          <FaCircleUser className="text-black dark:text-white text-3xl" />
         </span>
       </Link>
 
@@ -54,7 +52,7 @@ const DropdownUser = () => {
                 Administrador
               </span>
               <span className="block font-medium text-dark-5 dark:text-dark-6">
-                admin@gmail.com
+                {userEmail}
               </span>
             </span>
           </div>

@@ -1,12 +1,12 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   motion,
   useTransform,
   useScroll,
   AnimatePresence,
 } from "framer-motion";
-import { CardProps, PedidoForm, Servicio } from "@/types/interfaces";
+import { CardProps, Servicio } from "@/types/interfaces";
 import { useModal } from "../Common/ContextModal";
 import dayjs from "dayjs";
 import {
@@ -21,7 +21,6 @@ import {
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { municipios } from "./dataMunicipios";
-import { useAppSelector } from "@/hooks/useStore";
 import { FiAlertCircle } from "react-icons/fi";
 import Link from "next/link";
 
@@ -30,9 +29,33 @@ const { RangePicker } = DatePicker;
 const MunicipiosHabana = municipios;
 
 const HorizontalScrollCarousel: React.FC = () => {
-  const cardsServices: Servicio[] = useAppSelector(
-    (state) => state.serviceClient.services
-  );
+  const [cardsServices, setCardsServices] = useState<Servicio[]>([]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await fetch("http://localhost:1338/services");
+        const data = await response.json();
+        if (data.status === "success") {
+          const services = data.services.map((service: any) => ({
+            id: service.id_servicio,
+            title: service.nombre,
+            price: service.price,
+            description: service.descripcion,
+            url: service.img,
+          }));
+          setCardsServices(services);
+          console.log(services);
+        } else {
+          console.error("Failed to fetch services");
+        }
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      }
+    };
+
+    fetchServices();
+  }, []);
 
   const targetRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -56,15 +79,10 @@ const HorizontalScrollCarousel: React.FC = () => {
 
 const Card: React.FC<CardProps> = ({ card }) => {
   const { openModal } = useModal();
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleRequestClick = () => {
-    if (!isAuthenticated) {
-      setIsOpen(true);
-    } else {
-      openModal({ ...card });
-    }
+    openModal({ ...card });
   };
 
   return (
@@ -163,36 +181,43 @@ const SpringModal = ({
   );
 };
 
-const Servicios: React.FC = () => {
-  const { isVisible, modalData, closeModal } = useModal();
-  const [value, setValue] = useState<string>();
-  const [form] = useForm();
+interface PedidoForm {
+  phone: string;
+  municipio: string;
+  descripcion: string;
+  dateRange: [dayjs.Dayjs, dayjs.Dayjs];
+}
 
-  const onChange = (newValue: string) => {
-    setValue(newValue);
-  };
+const Servicios: React.FC = () => {
+  const { isVisible, closeModal } = useModal();
+  const [form] = useForm();
 
   const handleSubmit = async (values: PedidoForm) => {
     try {
-      const response = await fetch("/api/solicitud", {
+      const requestBody = {
+        phone: values.phone,
+        municipio: values.municipio,
+        address_reference: values.descripcion,
+        fecha_inicio: values.dateRange[0].toISOString(),
+        fecha_culminacion: values.dateRange[1].toISOString(),
+      };
+
+      const response = await fetch("http://localhost:1338/user/pedido", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
         throw new Error("Failed to submit request");
       }
 
-      const data = await response.json();
       message.success("Solicitud enviada exitosamente");
       closeModal();
     } catch (error) {
-      console.log(values);
       message.error("Hubo un problema al enviar la solicitud");
-      console.error("Error submitting form:", error);
     }
   };
 
@@ -246,11 +271,8 @@ const Servicios: React.FC = () => {
               <TreeSelect
                 placeholder="Selecciona tu municipio"
                 style={{ width: "100%" }}
-                value={value}
                 dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
                 treeData={MunicipiosHabana}
-                treeDefaultExpandAll
-                onChange={onChange}
               />
             </Form.Item>
 
@@ -261,7 +283,7 @@ const Servicios: React.FC = () => {
                 { required: true, message: "Por favor escribe una referencia" },
               ]}
             >
-              <Input.TextArea placeholder="Escribe aqui una referencia de la dirección" />
+              <Input.TextArea placeholder="Escribe aquí una referencia de la dirección" />
             </Form.Item>
 
             <Form.Item
@@ -271,10 +293,8 @@ const Servicios: React.FC = () => {
                 { required: true, message: "Selecciona un rango de días" },
               ]}
             >
-              <RangePicker
-                className="z-999999"
+              <DatePicker.RangePicker
                 disabledDate={(current) => {
-                  // No puede seleccionar fechas antes de hoy ni más allá de 30 días
                   return (
                     current &&
                     (current < dayjs().endOf("day") ||

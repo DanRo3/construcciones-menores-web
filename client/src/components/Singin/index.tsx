@@ -1,158 +1,170 @@
 "use client";
-import { useForm } from "@/hooks/useForm";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { AppDispatch, AppState } from "@/redux/store/store";
-import { MetaAuth, login } from "@/redux/actions/auth";
-import { authSuccess } from "@/redux/reducers/auth/authSlice";
+import { useForm } from "@/hooks/useForm";
 import { openNotification } from "../Common/Notification";
 import { MdOutlineTaskAlt } from "react-icons/md";
-import { useAppSelector } from "@/hooks/useStore";
+import Link from "next/link";
+import { message } from "antd";
+import { login } from "@/redux/slices/authSlice";
+import { AppDispatch, RootState } from "@/redux/store/store";
+import AuthRedirect from "../Common/Midlewares/Redirect";
 
 const Signin = () => {
   const router = useRouter();
-  const dispatch: AppDispatch = useDispatch();
-  const { loading, error } = useSelector((state: AppState) => state.auth);
-
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { form, handleChange } = useForm({
-    email: "daniel@gamil.com",
-    pass: "asSSWSdbfWEDeqweq782183787",
+    username: "",
+    password: "",
   });
 
-  const { email, pass } = form;
-  const state = useAppSelector((state: AppState) => state);
-
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // dispatch(login(email, pass));
-    openNotification(
-      "success",
-      "Correcto",
-      "Usted se ha autenticado correctamente.",
-      <MdOutlineTaskAlt className="text-green-500 text-3xl" />
-    );
-    dispatch(MetaAuth());
-    router.push("/home", { scroll: true });
-    console.log(state);
+    setErrorMessage(null);
+
+    const result = await dispatch(login(form));
+    if (login.fulfilled.match(result)) {
+      openNotification(
+        "success",
+        "Correcto",
+        "Usted se ha autenticado correctamente.",
+        <MdOutlineTaskAlt className="text-green-500 text-3xl" />
+      );
+      const userDataString = localStorage.getItem("userData");
+      const userDataObject = JSON.parse(userDataString || "");
+      const userRole = userDataObject.rol || "";
+      if (userRole === "admin") {
+        router.push("/dashboard", { scroll: true });
+      } else {
+        router.push("/home", { scroll: true });
+      }
+    } else if (login.rejected.match(result)) {
+      const errorMessage =
+        typeof result.payload === "string"
+          ? result.payload
+          : "Error desconocido";
+      setErrorMessage(errorMessage);
+      message.error(errorMessage);
+    }
   };
 
   return (
-    <div>
-      <div className="container">
-        <div className="-mx-4 flex flex-wrap">
-          <div className="w-full px-4">
-            <div className="shadow-three mx-auto max-w-[500px] rounded bg-white px-6 py-10 dark:bg-dark sm:p-[60px]">
-              <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                Construcciones Menores
-              </h3>
-              <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                Iniciar sesión
-              </h3>
-              <div className="mb-8 flex items-center justify-center">
-                <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
-                <p className="w-full px-5 text-center text-base font-medium text-body-color">
-                  Inicia sesión con tu correo
-                </p>
-                <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
-              </div>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-8">
-                  <label
-                    htmlFor="email"
-                    className="mb-3 block text-sm text-dark dark:text-white"
-                  >
-                    Correo
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    required
-                    autoComplete="off"
-                    value={email}
-                    onChange={handleChange}
-                    placeholder="Introduce tu correo"
-                    className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
-                  />
-                </div>
-                <div className="mb-8">
-                  <label
-                    htmlFor="password"
-                    className="mb-3 block text-sm text-dark dark:text-white"
-                  >
-                    Contraseña
-                  </label>
-                  <input
-                    type="password"
-                    name="pass"
-                    value={pass}
-                    onChange={handleChange}
-                    required
-                    placeholder="Introduce tu contraseña"
-                    className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
-                  />
-                </div>
-                <div className="mb-8 flex flex-col justify-between sm:flex-row sm:items-center">
-                  <div className="mb-4 sm:mb-0">
-                    <label
-                      htmlFor="checkboxLabel"
-                      className="flex cursor-pointer select-none items-center text-sm font-medium text-body-color"
-                    >
-                      <div className="relative">
-                        <input
-                          type="checkbox"
-                          id="checkboxLabel"
-                          className="sr-only"
-                        />
-                        <div className="box mr-4 flex h-5 w-5 items-center justify-center rounded border border-body-color border-opacity-20 dark:border-white dark:border-opacity-10">
-                          <span className="opacity-0">
-                            <svg
-                              width="11"
-                              height="8"
-                              viewBox="0 0 11 8"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
-                                fill="#3056D3"
-                                stroke="#3056D3"
-                                strokeWidth="0.4"
-                              />
-                            </svg>
-                          </span>
-                        </div>
-                      </div>
-                      Mantenme conectado
-                    </label>
-                  </div>
-                  <div>
-                    <a
-                      href="#0"
-                      className="text-sm font-medium text-primary hover:underline"
-                    >
-                      Olvidaste tu contraseña?
-                    </a>
-                  </div>
-                </div>
-                <div className="mb-6">
-                  <button
-                    className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-full bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
-                    type="submit"
-                    disabled={loading}
-                  >
-                    {loading ? "Comprobando credenciales..." : "Iniciar sesión"}
-                  </button>
-                  {error && <p>{error}</p>}
-                </div>
-              </form>
-              <p className="text-center text-base font-medium text-body-color">
-                No tienes una cuenta?{" "}
-                <Link href="/signup" className="text-primary hover:underline">
-                  Únetenos
-                </Link>
+    <div className="container">
+      <AuthRedirect />
+      <div className="-mx-4 flex flex-wrap">
+        <div className="w-full px-4">
+          <div className="shadow-three mx-auto max-w-[500px] rounded bg-white px-6 py-10 dark:bg-dark sm:p-[60px]">
+            <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
+              Construcciones Menores
+            </h3>
+            <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
+              Iniciar sesión
+            </h3>
+            <div className="mb-8 flex items-center justify-center">
+              <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
+              <p className="w-full px-5 text-center text-base font-medium text-body-color">
+                Inicia sesión con tu correo
               </p>
+              <span className="hidden h-[1px] w-full max-w-[70px] bg-body-color/50 sm:block"></span>
             </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-8">
+                <label
+                  htmlFor="username"
+                  className="mb-3 block text-sm text-dark dark:text-white"
+                >
+                  Correo
+                </label>
+                <input
+                  type="email"
+                  name="username"
+                  required
+                  autoComplete="off"
+                  value={form.username}
+                  onChange={handleChange}
+                  placeholder="Introduce tu correo"
+                  className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
+                />
+              </div>
+              <div className="mb-8">
+                <label
+                  htmlFor="password"
+                  className="mb-3 block text-sm text-dark dark:text-white"
+                >
+                  Contraseña
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  required
+                  placeholder="Introduce tu contraseña"
+                  className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
+                />
+              </div>
+              <div className="mb-8 flex flex-col justify-between sm:flex-row sm:items-center">
+                <div className="mb-4 sm:mb-0">
+                  <label
+                    htmlFor="checkboxLabel"
+                    className="flex cursor-pointer select-none items-center text-sm font-medium text-body-color"
+                  >
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        id="checkboxLabel"
+                        className="sr-only"
+                      />
+                      <div className="box mr-4 flex h-5 w-5 items-center justify-center rounded border border-body-color border-opacity-20 dark:border-white dark:border-opacity-10">
+                        <span className="opacity-0">
+                          <svg
+                            width="11"
+                            height="8"
+                            viewBox="0 0 11 8"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z"
+                              fill="#3056D3"
+                              stroke="#3056D3"
+                              strokeWidth="0.4"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                    Mantenme conectado
+                  </label>
+                </div>
+                <div>
+                  <a
+                    href="#0"
+                    className="text-sm font-medium text-primary hover:underline"
+                  >
+                    Olvidaste tu contraseña?
+                  </a>
+                </div>
+              </div>
+              <div className="mb-6">
+                <button
+                  className="shadow-submit dark:shadow-submit-dark flex w-full items-center justify-center rounded-full bg-primary px-9 py-4 text-base font-medium text-white duration-300 hover:bg-primary/90"
+                  type="submit"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Comprobando credenciales" : "Iniciar sesión"}
+                </button>
+              </div>
+            </form>
+            <p className="text-center text-base font-medium text-body-color">
+              No tienes una cuenta?{" "}
+              <Link href="/signup" className="text-primary hover:underline">
+                Únetenos
+              </Link>
+            </p>
           </div>
         </div>
       </div>

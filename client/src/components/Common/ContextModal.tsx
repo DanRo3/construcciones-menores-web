@@ -1,10 +1,14 @@
-import { ExtendedModalDataType, ModalDataType } from "@/types/interfaces";
+import {
+  ExtendedModalDataType,
+  ModalDataType,
+  Pedido,
+} from "@/types/interfaces";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 interface ModalContextValue {
   isVisible: boolean;
   modalData: ExtendedModalDataType;
-  openModal: (data: ModalDataType) => void;
+  openModal: (data: ExtendedModalDataType) => void;
   closeModal: () => void;
 }
 
@@ -13,10 +17,20 @@ const ModalContext = createContext<ModalContextValue | undefined>(undefined);
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [modalData, setModalData] = useState<ModalDataType>({
+  // Inicializa el estado con todas las propiedades de ExtendedModalDataType
+  const [modalData, setModalData] = useState<ExtendedModalDataType>({
     title: "",
     description: "",
     price: 0,
+    id: 0,
+    type: "",
+    url: "",
+    service: "",
+    customerName: "",
+    phoneNumber: "",
+    addressDescription: "",
+    municipio: "",
+    dateRange: [],
   });
 
   const [isVisible, setIsVisible] = useState<boolean>(false);

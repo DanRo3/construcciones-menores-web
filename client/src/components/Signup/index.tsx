@@ -1,19 +1,22 @@
 "use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
+import { message } from "antd";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    numberPhone: 0,
+    phone: 0,
     password: "",
     confirmPassword: "",
     termsAccepted: false,
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -24,85 +27,85 @@ const Signup = () => {
   };
 
   const isFormComplete = () => {
-    const {
-      name,
-      email,
-      numberPhone,
-      password,
-      confirmPassword,
-      termsAccepted,
-    } = formData;
+    const { name, email, phone, password, confirmPassword, termsAccepted } =
+      formData;
     return (
-      name &&
-      email &&
-      numberPhone &&
-      password &&
-      confirmPassword &&
-      termsAccepted
+      name && email && phone && password && confirmPassword && termsAccepted
     );
+  };
+
+  const translateError = (error: string) => {
+    switch (error) {
+      case "Email already registered":
+        return "Correo electrónico ya registrado";
+      case "insecure password, try including more special characters, using uppercase letters, using numbers or using a longer password":
+        return "Contraseña insegura, intenta incluir más caracteres especiales, usar letras mayúsculas o una contraseña más larga";
+      default:
+        return error;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      const errorMessage = "Las contraseñas no coinciden.";
-      setError(errorMessage);
-      console.error(errorMessage);
+      message.error("Las contraseñas no coinciden.");
       return;
     }
 
-    if (formData.numberPhone < 50000000 || formData.numberPhone > 63999999) {
-      const errorMessage = "El número de teléfono celular no es válido";
-      setError(errorMessage);
-      console.error(errorMessage);
+    if (formData.phone < 50000000 || formData.phone > 63999999) {
+      message.error("El número de teléfono celular no es válido");
       return;
     }
 
     if (!formData.termsAccepted) {
-      const errorMessage =
-        "Debes aceptar los términos y condiciones para continuar.";
-      setError(errorMessage);
-      console.error(errorMessage);
+      message.error("Debes aceptar los términos y condiciones para continuar.");
       return;
     }
 
     setLoading(true);
-    setError(null);
-    console.log(formData);
 
     try {
-      const response = await fetch("urlApi", {
+      const { confirmPassword, termsAccepted, ...dataToSend } = formData;
+      const formattedFormData = {
+        ...dataToSend,
+        phone: `+53 ${formData.phone}`,
+      };
+
+      const response = await fetch("http://localhost:1338/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formattedFormData),
       });
 
-      if (!response.ok) {
-        throw new Error("Error al crear la cuenta");
+      const responseData = await response.json();
+
+      if (responseData.status === "error") {
+        message.error(
+          translateError(
+            responseData.error || responseData.message || responseData.errors
+          )
+        );
+      } else {
+        message.success("Usuario creado correctamente");
+        setFormData({
+          name: "",
+          email: "",
+          phone: 0,
+          password: "",
+          confirmPassword: "",
+          termsAccepted: false,
+        });
+        router.push("/home/signin", { scroll: true });
       }
-
-      const result = await response.json();
-      console.log("Usuario creado", result);
-
-      setFormData({
-        name: "",
-        email: "",
-        numberPhone: 0,
-        password: "",
-        confirmPassword: "",
-        termsAccepted: false,
-      });
-    } catch (err: any) {
-      setError(err.message);
-      console.error(err.message);
+    } catch (err) {
+      message.error("Error al crear la cuenta");
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
       <div className="container">
@@ -166,10 +169,10 @@ const Signup = () => {
                   </label>
                   <input
                     type="number"
-                    name="numberPhone"
+                    name="phone"
                     required
                     placeholder="Introduce tu número de teléfono"
-                    value={formData.numberPhone}
+                    value={formData.phone}
                     onChange={handleChange}
                     className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                   />
@@ -243,7 +246,6 @@ const Signup = () => {
                   </button>
                 </div>
               </form>
-              {error && <p className="text-center text-red-500">{error}</p>}
               <p className="text-center text-base font-medium text-body-color">
                 ¿Ya tienes una cuenta?{" "}
                 <Link href="/signin" className="text-primary hover:underline">
