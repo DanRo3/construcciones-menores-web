@@ -8,6 +8,12 @@
   }
 }
 
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/Inter-Regular.ttf") format("truetype");
+  /* Agrega más pesos y estilos según sea necesario */
+}
+
 @layer components {
   input[type="checkbox"]:checked ~ label span svg {
     @apply inline-flex;
