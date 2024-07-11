@@ -1,34 +1,42 @@
 "use client";
-import { Servicio } from "@/types/interfaces";
+
+import { ServicioServer } from "@/types/interfaces";
 import ServiceTable from "../Tables/ServiceTable";
+import { useEffect, useState } from "react";
 
 const AdminService = () => {
-  const Services: Servicio[] = [
-    {
-      url: "https://media.istockphoto.com/id/468996060/es/foto/trabajador-de-construcci%C3%B3n-de-la-casa-de-alba%C3%B1iler%C3%ADa-wal.jpg?s=612x612&w=0&k=20&c=9AARfQCtfEnnNMf4Ri3YlvTuGybab02PgH34FVKYVSM=",
-      title: "Construcción de muros",
-      price: 20,
-      description: "Levantamiento de paredes y muros",
-      id: 1,
-    },
-    {
-      url: "https://media.istockphoto.com/id/1221306297/es/foto/el-hombre-vierte-pintura-en-la-bandeja-y-sumerge-el-rodillo-trabajador-profesional-de-la.jpg?s=612x612&w=0&k=20&c=_qILsrUuQiFUVL7BE8I-gwXxp_pY8T0VJdv6Tpd4Ab8=",
-      title: "Servicio de pintura",
-      price: 3,
-      description: "Pintura para interiores y fachadas",
-      id: 2,
-    },
-    {
-      url: "https://media.istockphoto.com/id/1083735696/es/foto/perito-en-casco-y-chaqueta-de-alta-visibilidad-con-tableta-digital-realizando-inspecci%C3%B3n-de.jpg?s=612x612&w=0&k=20&c=iXRH7zHgmMuCGr4vMYAecxzEbXXkVh8fa9q876sprzw=",
-      title: "Servicio de defectación",
-      price: 20,
-      description: "Defectación de casas y estructuras",
-      id: 3,
-    },
-  ];
+  const [services, setServices] = useState<ServicioServer[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch("http://localhost:1338/admin/services", {
+        method: "GET",
+        credentials: "include", // Esto incluirá las cookies en la petición
+      });
+      const data = await response.json();
+      setServices(data.services);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching services:", error);
+    }
+  };
+
+  const handleServiceDeleted = (deletedServiceId: number) => {
+    setServices((prevServices) =>
+      prevServices.filter((service) => service.id_servicio !== deletedServiceId)
+    );
+  };
+
   return (
     <>
-      <ServiceTable services={Services} />
+      <ServiceTable
+        services={services}
+        onUpdateServices={handleServiceDeleted}
+      />
     </>
   );
 };

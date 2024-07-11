@@ -11,6 +11,7 @@ import (
 
 func GetAllProducts(e echo.Context) error {
 	productos, err := producto.GetAllProducts(repository.GetConnector())
+	repository.GetConnector().DeallocateAll(context.Background())
 	if err != nil {
 		log.Println(err)
 		return e.JSON(500, map[string]string{

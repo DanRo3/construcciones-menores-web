@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Space,
@@ -14,6 +14,7 @@ import {
 import { Feedback } from "@/types/interfaces";
 import { DeleteOutlined } from "@ant-design/icons";
 import { BsSendFill } from "react-icons/bs";
+import { format } from "date-fns"; // Importar la función format de date-fns
 
 const columns = [
   {
@@ -22,6 +23,7 @@ const columns = [
     key: "date",
     sorter: (a: Feedback, b: Feedback) =>
       new Date(a.date).getTime() - new Date(b.date).getTime(),
+    render: (date: string) => format(new Date(date), "dd/MM/yyyy HH:mm:ss"), // Formatear la fecha usando date-fns
   },
   {
     title: "Nombre",
@@ -47,16 +49,39 @@ const columns = [
 ];
 
 interface FeedbackListProps {
-  feedbacks: Feedback[];
   onSelect: (feedback: Feedback) => void;
 }
 
-const FeedbackList: React.FC<FeedbackListProps> = ({ feedbacks, onSelect }) => {
+const FeedbackList: React.FC<FeedbackListProps> = ({ onSelect }) => {
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(
     null
   );
   const [showResponseForm, setShowResponseForm] = useState<boolean>(false);
+
+  useEffect(() => {
+    fetchFeedbacks();
+  }, []);
+
+  const fetchFeedbacks = async () => {
+    try {
+      const response = await fetch("http://localhost:1338/admin/feedbacks", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Error al obtener los feedbacks");
+      }
+      const data = await response.json();
+      setFeedbacks(data.feeds);
+    } catch (error) {
+      console.error("Error al obtener feedbacks:", error.message);
+    }
+  };
 
   const rowSelection = {
     selectedRowKeys,
@@ -73,7 +98,6 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ feedbacks, onSelect }) => {
   };
 
   const handleResponseSubmit = () => {
-    // Lógica para enviar la respuesta
     console.log("Responder feedback:", selectedFeedback);
     setShowResponseForm(false);
   };
@@ -123,7 +147,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ feedbacks, onSelect }) => {
             <Col span={24}>
               <Typography.Paragraph>
                 <strong>Fecha:</strong>{" "}
-                {new Date(selectedFeedback.date).toLocaleDateString()}
+                {format(new Date(selectedFeedback.date), "dd/MM/yyyy HH:mm:ss")}
               </Typography.Paragraph>
               <Typography.Paragraph>
                 <strong>Email:</strong> {selectedFeedback.email}
@@ -132,7 +156,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ feedbacks, onSelect }) => {
                 <strong>Contenido:</strong>
               </Typography.Text>
               <Typography.Paragraph>
-                {selectedFeedback.content}
+                {selectedFeedback.message}
               </Typography.Paragraph>
             </Col>
             <Divider plain>Respuesta</Divider>

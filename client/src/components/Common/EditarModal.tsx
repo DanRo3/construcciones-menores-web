@@ -1,16 +1,16 @@
 import { Modal, Form, Input, Button, InputNumber } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { ExtendedModalDataType } from "@/types/interfaces";
 import TextArea from "antd/es/input/TextArea";
 import { IoLink } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { FaDollarSign } from "react-icons/fa";
+import { ServicioServer } from "../Tables/ServiceTable";
 
 interface EditServiceModalProps {
   visible: boolean;
   onClose: () => void;
-  serviceData: ExtendedModalDataType;
-  onSave: (data: any) => void;
+  serviceData: ServicioServer;
+  onSave: (data: ServicioServer) => void;
 }
 
 const EditServiceModal: React.FC<EditServiceModalProps> = ({
@@ -20,13 +20,19 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   onSave,
 }) => {
   const [form] = Form.useForm<FormInstance>();
-
-  const [imageUrl, setImageUrl] = useState<string>(serviceData.url || "");
+  const [imageUrl, setImageUrl] = useState<string>(serviceData.img || "");
 
   const handleSubmit = async () => {
     try {
       await form.validateFields();
-      onSave(form.getFieldsValue());
+      const values = form.getFieldsValue();
+      onSave({
+        id_servicio: serviceData.id_servicio,
+        nombre: serviceData.nombre,
+        price: serviceData.price,
+        descripcion: serviceData.descripcion,
+        img: serviceData.img,
+      });
       onClose();
     } catch (errorInfo) {
       console.error("Error validating fields:", errorInfo);
@@ -34,8 +40,17 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
   };
 
   useEffect(() => {
-    setImageUrl(serviceData.url || "");
-  }, [serviceData.url]);
+    setImageUrl(serviceData.img || "");
+  }, [serviceData.img]);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      nombre: serviceData.nombre,
+      price: serviceData.price,
+      description: serviceData.descripcion,
+      url: serviceData.img,
+    });
+  }, [serviceData, form]);
 
   return (
     <Modal
@@ -58,18 +73,18 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             form={form}
             layout="vertical"
             initialValues={{
-              title: serviceData.title,
+              nombre: serviceData.nombre,
               price: serviceData.price,
-              description: serviceData.description,
-              url: serviceData.url,
+              description: serviceData.descripcion,
+              url: serviceData.img,
             }}
             onValuesChange={(_, allValues) => {
-              setImageUrl(allValues.url || "");
+              setImageUrl(allValues.img || "");
             }}
           >
             <Form.Item
               label="Nombre del servicio"
-              name="title"
+              name="nombre"
               rules={[
                 {
                   required: true,
@@ -111,10 +126,10 @@ const EditServiceModal: React.FC<EditServiceModalProps> = ({
             form={form}
             layout="vertical"
             initialValues={{
-              url: serviceData.url,
+              url: serviceData.img,
             }}
             onValuesChange={(_, allValues) => {
-              setImageUrl(allValues.url || "");
+              setImageUrl(allValues.img || "");
             }}
           >
             <Form.Item

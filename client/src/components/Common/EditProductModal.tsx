@@ -1,6 +1,6 @@
 import { Modal, Form, Input, Button, InputNumber } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { ExtendedModalDataType } from "@/types/interfaces";
+import { ExtendedModalDataType, ProductoServer } from "@/types/interfaces";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import { FaDollarSign } from "react-icons/fa";
@@ -9,7 +9,7 @@ import { IoLink } from "react-icons/io5";
 interface EditProductModalProps {
   visible: boolean;
   onClose: () => void;
-  productData: ExtendedModalDataType;
+  productData: ProductoServer;
   onSave: (data: any) => void;
 }
 
@@ -21,7 +21,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
 }) => {
   const [form] = Form.useForm<FormInstance>();
 
-  const [imageUrl, setImageUrl] = useState<string>(productData.url || "");
+  const [imageUrl, setImageUrl] = useState<string>(productData.imgpath || "");
 
   const handleSubmit = async () => {
     try {
@@ -34,8 +34,8 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   };
 
   useEffect(() => {
-    setImageUrl(productData.url || "");
-  }, [productData.url]);
+    setImageUrl(productData.imgpath || "");
+  }, [productData.imgpath]);
 
   return (
     <Modal
@@ -58,13 +58,12 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
             form={form}
             layout="vertical"
             initialValues={{
-              title: productData.title,
+              title: productData.name,
               price: productData.price,
-              description: productData.description,
-              url: productData.url,
+              url: productData.imgpath,
             }}
             onValuesChange={(_, allValues) => {
-              setImageUrl(allValues.url || "");
+              setImageUrl(allValues.imgpath || "");
             }}
           >
             <Form.Item
@@ -99,7 +98,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
             form={form}
             layout="vertical"
             initialValues={{
-              url: productData.url,
+              url: productData.imgpath,
             }}
             onValuesChange={(_, allValues) => {
               setImageUrl(allValues.url || "");

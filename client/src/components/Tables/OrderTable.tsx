@@ -1,8 +1,12 @@
-"use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useModal } from "../Common/ContextModal"; // Asegúrate de que este path sea correcto
+import ViewOrderModal from "../Common/ViewOrderModal"; // Asegúrate de que este path sea correcto
 import { Pedido } from "@/types/interfaces";
-import { useModal } from "../Common/ContextModal";
-import ViewOrderModal from "../Common/ViewOrderModal";
+
+interface UpdatedOrders extends Pedido {
+  userName: string;
+  serviceName: string;
+}
 
 interface OrderTableProps {
   orders: Pedido[];
@@ -10,9 +14,63 @@ interface OrderTableProps {
 
 const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
   const { isVisible, modalData, closeModal, openModal } = useModal();
+  const [loadedOrders, setLoadedOrders] = useState<UpdatedOrders[]>([]);
 
-  const handleRowClick = (order: Pedido) => {
-    openModal(order);
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const updatedOrders = await Promise.all(
+          orders.map(async (order) => {
+            const userResponse = await fetch(
+              `http://localhost:1338/admin/user/`,
+              {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ user_id: order.user_id }),
+              }
+            );
+            if (!userResponse.ok)
+              throw new Error("Error al obtener el nombre del usuario");
+            const userData = await userResponse.json();
+            const userName = userData.name;
+
+            const serviceResponse = await fetch(
+              `http://localhost:1338/admin/service/`,
+              {
+                method: "POST",
+                credentials: "include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_servicio: order.id_servicio }),
+              }
+            );
+            if (!serviceResponse.ok)
+              throw new Error("Error al obtener el nombre del servicio");
+            const serviceData = await serviceResponse.json();
+            const serviceName = serviceData.nombre;
+
+            return {
+              ...order,
+              userName,
+              serviceName,
+            };
+          })
+        );
+        setLoadedOrders(updatedOrders);
+      } catch (error) {
+        console.error("Error al obtener detalles de los pedidos:", error);
+      }
+    };
+
+    fetchOrderDetails();
+  }, [orders]);
+
+  const handleRowClick = (order: UpdatedOrders) => {
+    openModal({
+      ...order,
+      id: order.id,
+      id_servicio: order.id_servicio,
+    });
   };
 
   return (
@@ -20,63 +78,27 @@ const OrderTable: React.FC<OrderTableProps> = ({ orders }) => {
       <table className="min-w-full divide-y divide-gray-200 rounded-2xl overflow-hidden">
         <thead className="bg-gray-50 dark:bg-gray-700">
           <tr>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-white"
-            >
-              ID
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-white"
-            >
-              Servicio
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-white"
-            >
-              Nombre del Cliente
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-white"
-            >
-              Número de Teléfono
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-white"
-            >
-              Municipio
-            </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider dark:text-white"
-            >
-              Direccion/Referencia
-            </th>
+            <th>ID</th>
+            <th>Servicio</th>
+            <th>Nombre del Cliente</th>
+            <th>Número de Teléfono</th>
+            <th>Municipio</th>
+            <th>Dirección/Referencia</th>
           </tr>
         </thead>
         <tbody className="bg-white dark:bg-gray-dark divide-y divide-gray-200">
-          {orders.map((order) => (
+          {loadedOrders.map((order) => (
             <tr
               key={order.id}
-              className="hover:bg-gray-100 dark:hover:bg-slate-600 cursor-pointer"
+              className="cursor-pointer"
               onClick={() => handleRowClick(order)}
             >
-              <td className="whitespace-nowrap px-6 py-4">{order.id}</td>
-              <td className="whitespace-nowrap px-6 py-4">{order.service}</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                {order.customerName}
-              </td>
-              <td className="whitespace-nowrap px-6 py-4">
-                {order.phoneNumber}
-              </td>
-              <td className="whitespace-nowrap px-6 py-4">{order.municipio}</td>
-              <td className="whitespace-nowrap px-6 py-4">
-                {order.addressDescription}
-              </td>
+              <td>{order.id}</td>
+              <td>{order.serviceName}</td>
+              <td>{order.userName}</td>
+              <td>{order.phone}</td>
+              <td>{order.municipio}</td>
+              <td>{order.address_reference}</td>
             </tr>
           ))}
         </tbody>

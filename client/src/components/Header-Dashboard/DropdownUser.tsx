@@ -1,23 +1,30 @@
 import { useState } from "react";
 import Link from "next/link";
-import { FaCircleUser } from "react-icons/fa6";
 import ClickOutside from "@/components/ClickOutside";
+import { FaCircleUser } from "react-icons/fa6";
 import { MdOutlineTaskAlt } from "react-icons/md";
 import { openNotification } from "../Common/Notification";
 import { useRouter } from "next/navigation";
-import { useAppDispatch, useAppSelector } from "@/hooks/useStore";
+import { useAppDispatch } from "@/hooks/useStore";
 import { logout } from "@/redux/slices/authSlice";
-import { RootState } from "@/redux/store/store";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const userEmail = useAppSelector(
-    (state: RootState) => state.auth.user?.username
-  );
-  const userRole = useAppSelector((state: RootState) => state.auth.user);
-  console.log(userRole);
+
+  // Obtener la información del usuario del localStorage
+  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+  const userEmail = userData.username;
+  const userRole = userData.rol;
+  let Rol = "";
+
+  if (userRole === "user") {
+    Rol = "Usuario:";
+  } else {
+    Rol = "Administrador:";
+  }
+
   const handleSingOut = () => {
     dispatch(logout());
     router.push("/home");
@@ -46,11 +53,13 @@ const DropdownUser = () => {
         <div
           className={`absolute md:right-0 -right-[3px] mt-7.5 flex w-[220px] flex-col rounded-lg border-[0.5px] border-stroke bg-white shadow-default dark:border-dark-3 dark:bg-gray-dark`}
         >
-          <div className="flex items-center gap-2.5 px-5 pb-5.5 pt-3.5">
+          <div className="flex flex-col gap-2.5 px-5 pb-5.5 pt-3.5">
             <span className="block">
-              <span className="block font-medium text-dark dark:text-white">
-                Administrador
+              <span className="block font-medium text-dark-5 dark:text-dark-6">
+                {Rol}
               </span>
+            </span>
+            <span className="block">
               <span className="block font-medium text-dark-5 dark:text-dark-6">
                 {userEmail}
               </span>
@@ -86,7 +95,7 @@ const DropdownUser = () => {
                   </clipPath>
                 </defs>
               </svg>
-              Cerrar sesion
+              Cerrar sesión
             </button>
           </div>
         </div>

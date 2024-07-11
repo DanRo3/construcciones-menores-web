@@ -3,8 +3,8 @@ import DropdownUser from "./DropdownUser";
 import Image from "next/image";
 import SearchForm from "@/components/Header-Dashboard/SearchForm";
 import ThemeToggler from "../Header/ThemeToggler";
-import Logo from '../../../public/images/logo/logo.svg';
-import Logo2 from '../../../public/images/logo/logo.png';
+import Logo from "../../../public/images/logo/logo.svg";
+import Logo2 from "../../../public/images/logo/logo.png";
 
 const HeaderDashboard = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -58,52 +58,52 @@ const HeaderDashboard = (props: {
           {/* <!-- Hamburger Toggle BTN --> */}
 
           <Link className="block flex-shrink-0 lg:hidden" href="/dashboard">
-          <Image
+            <Image
               src={Logo2}
-              alt='logo'
+              alt="logo"
               width={60}
               height={30}
               className="w-full dark:hidden pl-1"
-          />
-          <Image
+            />
+            <Image
               src={Logo}
-              alt='logo'
+              alt="logo"
               width={30}
               height={10}
               className="hidden w-1/4 dark:block"
-          />
+            />
           </Link>
         </div>
 
         <div className="hidden xl:block">
           <Link className="block flex-shrink-0" href="/dashboard">
             <Image
-                src={Logo2}
-                alt='logo'
-                width={60}
-                height={30}
-                className="w-full dark:hidden pl-1"
+              src={Logo2}
+              alt="logo"
+              width={60}
+              height={30}
+              className="w-full dark:hidden pl-1"
             />
             <Image
-                src={Logo}
-                alt='logo'
-                width={30}
-                height={10}
-                className="hidden w-1/4 dark:block"
+              src={Logo}
+              alt="logo"
+              width={30}
+              height={10}
+              className="hidden w-1/4 dark:block"
             />
-            </Link>
+          </Link>
         </div>
 
-        <div className="flex items-center justify-normal gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
-          <ul className="flex items-center gap-2 2xsm:gap-4">
+        <div className="flex items-center justify-normal mx-7 gap-2 2xsm:gap-4 lg:w-full lg:justify-between xl:w-auto xl:justify-normal">
+          {/* <ul className="flex items-center gap-2 2xsm:gap-4">
             {/* <!-- Search Form --> */}
-            <SearchForm />
-            {/* <!-- Search Form --> */}
+          {/* <SearchForm /> */}
+          {/* <!-- Search Form --> */}
 
-            {/* <!-- Dark Mode Toggle --> */}
-            <ThemeToggler />
-            {/* <!-- Dark Mode Toggle --> */}
-          </ul>
+          {/* <!-- Dark Mode Toggle --> */}
+          {/* <ThemeToggler /> */}
+          {/* <!-- Dark Mode Toggle --> */}
+          {/*</ul> */}
 
           {/* <!-- User Area --> */}
           <DropdownUser />

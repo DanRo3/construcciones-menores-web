@@ -25,44 +25,40 @@ export interface Producto {
     id: number;
 }
 
+export interface ProductoServer{
+  "id": number,
+  "name":string,
+   "price": number,
+  "imgpath":string
+}
+
 export interface Pedido {
   id: number;
-  service:string;
-  customerName: string;
-  phoneNumber: string;
-  addressDescription: string;
+  id_servicio: number;
+  user_id: number;
+  phone: string;
   municipio: string;
-  dateRange: string[]; 
+  address_reference: string;
+  fecha_inicio: string;
+  fecha_culminacion: string;
+  status: string;
 }
 
 export interface Servicio {
-  id: string,
+  id: number,
   title: string,
   price: string,
   description:string,
   url: string,
 }
 
-export type ModalDataType = {
-  title?: string;
-  description?: string;
-  price?: number;
-  id?:number
+export type ServicioServer = {
+  id_servicio: number;
+  nombre: string;
+  price: number;
+  descripcion: string;
+  img: string;
 };
-
-export type ExtendedModalDataType = ModalDataType & { type?: string;url?: string;} & Pedido & {
-  url?: string;
-  title?: string;
-  price?: number;
-  description?: string;
-  id: number;
-  service?: string;
-  customerName?: string;
-  phoneNumber?: number;
-  addressDescription?: string;
-  dateRange?: [string, string];
-}
-
 
 export interface PedidoForm {
   phoneNumber: number | undefined;
@@ -79,3 +75,12 @@ export interface User {
   phoneNumber?: number;
   rol:string;
 }
+
+type GenericModalData<T extends object> = T;
+
+type ModalComponentType = 'Card' | 'Feedback' | 'Producto' | 'Pedido' | 'Servicio';
+
+export type ExtendedModalDataType = {
+  type: ModalComponentType;
+  data: GenericModalData<any>;
+};

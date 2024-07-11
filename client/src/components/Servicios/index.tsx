@@ -24,8 +24,6 @@ import { municipios } from "./dataMunicipios";
 import { FiAlertCircle } from "react-icons/fi";
 import Link from "next/link";
 
-const { RangePicker } = DatePicker;
-
 const MunicipiosHabana = municipios;
 
 const HorizontalScrollCarousel: React.FC = () => {
@@ -45,7 +43,6 @@ const HorizontalScrollCarousel: React.FC = () => {
             url: service.img,
           }));
           setCardsServices(services);
-          console.log(services);
         } else {
           console.error("Failed to fetch services");
         }
@@ -82,7 +79,12 @@ const Card: React.FC<CardProps> = ({ card }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleRequestClick = () => {
-    openModal({ ...card });
+    const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+    if (!userData.id) {
+      setIsOpen(true);
+    } else {
+      openModal({ ...card });
+    }
   };
 
   return (
@@ -98,7 +100,7 @@ const Card: React.FC<CardProps> = ({ card }) => {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
-            className="rounded-t-lg mb-2 p-8 w-full h-full  object-cover object-center transition duration-200 group-hover:scale-110"
+            className="rounded-t-lg mb-2 p-8 w-full h-full object-cover object-center transition duration-200 group-hover:scale-110"
           ></div>
         </div>
         <div className="px-5 pb-5">
@@ -119,7 +121,9 @@ const Card: React.FC<CardProps> = ({ card }) => {
           </div>
         </div>
       </div>
-      <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} />
+      <AnimatePresence>
+        {isOpen && <SpringModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+      </AnimatePresence>
     </div>
   );
 };
@@ -189,13 +193,21 @@ interface PedidoForm {
 }
 
 const Servicios: React.FC = () => {
-  const { isVisible, closeModal } = useModal();
+  const { isVisible, closeModal, modalData } = useModal();
   const [form] = useForm();
 
   const handleSubmit = async (values: PedidoForm) => {
     try {
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      if (!userData.id) {
+        message.error("Usuario no autenticado");
+        return;
+      }
+
       const requestBody = {
-        phone: values.phone,
+        id_servico: modalData.id,
+        user_id: userData.id,
+        phone: values.phone.toString(), // Convertir el número de teléfono a cadena
         municipio: values.municipio,
         address_reference: values.descripcion,
         fecha_inicio: values.dateRange[0].toISOString(),
@@ -207,16 +219,23 @@ const Servicios: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(requestBody),
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to submit request");
+      console.log(response);
+      if (response.ok) {
+        message.success("Solicitud enviada exitosamente");
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        message.error(
+          `Error: ${
+            errorData.message || "Hubo un problema al enviar la solicitud"
+          }`
+        );
       }
-
-      message.success("Solicitud enviada exitosamente");
-      closeModal();
     } catch (error) {
+      console.error("Error al enviar la solicitud:", error);
       message.error("Hubo un problema al enviar la solicitud");
     }
   };

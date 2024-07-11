@@ -45,67 +45,49 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      message.error("Las contraseñas no coinciden.");
-      return;
-    }
-
-    if (formData.phone < 50000000 || formData.phone > 63999999) {
-      message.error("El número de teléfono celular no es válido");
-      return;
-    }
-
-    if (!formData.termsAccepted) {
-      message.error("Debes aceptar los términos y condiciones para continuar.");
-      return;
-    }
-
-    setLoading(true);
-
+  const handleSubmit = async (values: PedidoForm) => {
     try {
-      const { confirmPassword, termsAccepted, ...dataToSend } = formData;
-      const formattedFormData = {
-        ...dataToSend,
-        phone: `+53 ${formData.phone}`,
+      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
+      const phoneNumber = parseInt(values.phone, 10); // Convertir a número entero
+
+      // Validar el número de teléfono
+      if (phoneNumber < 50000000 || phoneNumber > 63999999) {
+        message.error(
+          "El número de teléfono debe estar entre 50000000 y 63999999"
+        );
+        return;
+      }
+
+      const requestBody = {
+        id_servico: modalData.id,
+        user_id: userData.id,
+        phone: values.phone.toString(),
+        municipio: values.municipio,
+        address_reference: values.descripcion,
+        fecha_inicio: values.dateRange[0].toISOString(),
+        fecha_culminacion: values.dateRange[1].toISOString(),
       };
 
-      const response = await fetch("http://localhost:1338/registro", {
+      const response = await fetch("http://localhost:1338/user/pedido", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formattedFormData),
+        credentials: "include", // Incluir cookies con la solicitud
+        body: JSON.stringify(requestBody),
       });
 
-      const responseData = await response.json();
-
-      if (responseData.status === "error") {
-        message.error(
-          translateError(
-            responseData.error || responseData.message || responseData.errors
-          )
-        );
-      } else {
-        message.success("Usuario creado correctamente");
-        setFormData({
-          name: "",
-          email: "",
-          phone: 0,
-          password: "",
-          confirmPassword: "",
-          termsAccepted: false,
-        });
-        router.push("/home/signin", { scroll: true });
+      if (!response.ok) {
+        throw new Error("Failed to submit request");
       }
-    } catch (err) {
-      message.error("Error al crear la cuenta");
-    } finally {
-      setLoading(false);
+
+      message.success("Solicitud enviada exitosamente");
+      closeModal();
+    } catch (error) {
+      message.error("Hubo un problema al enviar la solicitud");
     }
   };
+
   return (
     <section className="relative z-10 overflow-hidden pb-16 pt-36 md:pb-20 lg:pb-28 lg:pt-[180px]">
       <div className="container">

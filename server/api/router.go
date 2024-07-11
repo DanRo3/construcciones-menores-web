@@ -20,7 +20,13 @@ func CreateRouter() *echo.Echo {
 	// Middleware básicos
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
-	e.Use(middleware.CORS())
+	// Configuración manual de CORS
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Cambia esto al origen que necesites
+		AllowMethods:     []string{echo.GET, echo.POST, echo.PUT, echo.DELETE, echo.OPTIONS},
+		AllowCredentials: true,
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+	}))
 
 	// Rutas públicas
 	e.POST("/feedback", feedback.Create)
@@ -32,6 +38,12 @@ func CreateRouter() *echo.Echo {
 
 	// Rutas de usuario
 	use := e.Group("user", midlawer.IsLoged)
+	use.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Cambia esto al origen que necesites
+		AllowMethods:     []string{echo.GET, echo.POST, echo.PUT, echo.DELETE, echo.OPTIONS},
+		AllowCredentials: true,
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+	}))
 	use.GET("/producto", productos.GetProduct)
 	use.GET("/productos", productos.GetAllProducts)
 	use.GET("/pedido", pedido.GetPedido)
@@ -43,9 +55,16 @@ func CreateRouter() *echo.Echo {
 
 	// Rutas de administrador
 	admin := e.Group("admin", midlawer.Admin)
-	admin.POST("/service", servicios.CreateService)
+	admin.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://localhost:3000"}, // Cambia esto al origen que necesites
+		AllowMethods:     []string{echo.GET, echo.POST, echo.PUT, echo.DELETE, echo.OPTIONS},
+		AllowCredentials: true,
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept, echo.HeaderAuthorization},
+	}))
+
 	admin.GET("/service", servicios.GetService)
 	admin.GET("/services", servicios.GetAllService)
+	admin.POST("/service", servicios.CreateService)
 	admin.POST("/deleteService", servicios.DeleteService)
 
 	admin.POST("/user", user.CreateUser)
@@ -65,8 +84,8 @@ func CreateRouter() *echo.Echo {
 
 	admin.GET("/pedido", pedido.GetPedido)
 	admin.GET("/pedidos", pedido.GetAllPedidos)
-
 	admin.POST("/deletePedido", pedido.DeletePedido)
+
 	admin.GET("/subscriptores", subscripcion.All)
 	admin.POST("/notify", notification.All)
 

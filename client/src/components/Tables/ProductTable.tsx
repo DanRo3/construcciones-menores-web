@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Producto } from "@/types/interfaces";
+import { ProductoServer } from "@/types/interfaces"; // Asegúrate de importar los tipos de datos necesarios
 import { FaEdit, FaTrash } from "react-icons/fa";
 import CreateButton from "./CreateButton";
 import { useModal } from "../Common/ContextModal";
@@ -9,31 +9,34 @@ import CreateProductModal from "../Common/CreateProductoModal";
 import { GrFormAdd } from "react-icons/gr";
 
 interface ProductTableProps {
-  products: Producto[];
+  products: ProductoServer[];
 }
 
 const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
-  const { isVisible, modalData, closeModal } = useModal();
-  const { openModal } = useModal();
-  const [selectedProduct, setSelectedProduct] = useState<Producto | null>(null);
-  const [editingProduct, setEditingProduct] = useState<Producto | null>(null);
+  const { isVisible, modalData, closeModal, openModal } = useModal();
+  const [selectedProduct, setSelectedProduct] = useState<ProductoServer | null>(
+    null
+  );
+  const [editingProduct, setEditingProduct] = useState<ProductoServer | null>(
+    null
+  );
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
   const handleDeleteProduct = (productId: number) => {
     console.log(`Eliminar producto con ID: ${productId}`);
   };
 
-  const handleEditProduct = (product: Producto) => {
+  const handleEditProduct = (product: ProductoServer) => {
     closeModal();
     setEditingProduct(product);
   };
 
-  const handleSaveEditedProduct = (updatedProduct: Producto) => {
+  const handleSaveEditedProduct = (updatedProduct: ProductoServer) => {
     console.log("Producto actualizado:", updatedProduct);
     closeModal();
   };
 
-  const handleRowClick = (product: Producto) => {
+  const handleRowClick = (product: ProductoServer) => {
     setSelectedProduct(product);
     openModal(product);
   };
@@ -89,11 +92,11 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
                 <div className="flex items-center">
                   <div
                     className="flex-shrink-0 w-10 h-10 bg-cover rounded-md"
-                    style={{ backgroundImage: `url(${product.url})` }}
+                    style={{ backgroundImage: `url(${product.imgpath})` }}
                   ></div>
                 </div>
               </td>
-              <td className="whitespace-nowrap px-6 py-4">{product.title}</td>
+              <td className="whitespace-nowrap px-6 py-4">{product.name}</td>
               <td className="whitespace-nowrap px-6 py-4">{product.price}</td>
             </tr>
           ))}
@@ -132,13 +135,11 @@ const ProductTable: React.FC<ProductTableProps> = ({ products }) => {
           <div className="flex flex-row items-center">
             <div
               className="w-32 h-32 bg-cover bg-center rounded-md overflow-hidden"
-              style={{
-                backgroundImage: `url(${modalData.url || ""})`,
-              }}
+              style={{ backgroundImage: `url(${modalData.imgpath || ""})` }}
             ></div>
             <div className="w-full md:w-1/2 md:pl-4 flex justify-between flex-col">
               <h1 className="mb-4 text-center text-2xl font-bold text-gray-800 sm:text-3xl md:text-left">
-                {modalData.title}
+                {modalData.name}
               </h1>
 
               <div className="flex flex-row text-justify">
