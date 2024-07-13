@@ -33,14 +33,6 @@ const AdminPedidos = () => {
     fetchOrders();
   }, []);
 
-  // if (loading) {
-  //   return <p>Cargando pedidos...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>Error: {error}</p>;
-  // }
-
   return <OrderTable orders={orders} />;
 };
 

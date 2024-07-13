@@ -1,10 +1,10 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, ChangeEvent } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useForm } from "@/hooks/useForm";
 import axios from "axios";
 import { message } from "antd"; // Importar el componente message
+import { useForm } from "@/hooks/useForm";
 
 const Contact = () => {
   const mapRef = useRef(null);
@@ -16,6 +16,7 @@ const Contact = () => {
 
   const { user_name, email, UserMessage } = form;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitDisabled, setSubmitDisabled] = useState(false);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -55,20 +56,44 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await axios.post("http://localhost:1338/feedback", {
+      await axios.post("http://localhost:1338/feedback", {
         user_name: user_name,
         email: email,
         message: UserMessage,
       });
 
       message.success("Mensaje enviado exitosamente!");
+      setSubmitDisabled(true);
+      setTimeout(() => {
+        setSubmitDisabled(false);
+      }, 120000); // Deshabilitar el botón de enviar durante 2 minutos
+
+      // Vaciar el formulario
+      handleChange({
+        target: {
+          name: "user_name",
+          value: "",
+        },
+      } as ChangeEvent<HTMLInputElement>);
+
+      handleChange({
+        target: {
+          name: "email",
+          value: "",
+        },
+      } as ChangeEvent<HTMLInputElement>);
+
+      handleChange({
+        target: {
+          name: "UserMessage",
+          value: "",
+        },
+      } as ChangeEvent<HTMLTextAreaElement>);
     } catch (error) {
       console.error(error);
       message.error("Hubo un error al enviar el formulario.");
     } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 60000);
+      setIsSubmitting(false);
     }
   };
 
@@ -104,6 +129,7 @@ const Contact = () => {
                         placeholder="Escribe tu nombre"
                         value={user_name}
                         onChange={handleChange}
+                        autoComplete="disabled"
                         className="border-stroke w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:text-body-color-dark dark:shadow-two dark:focus:border-primary dark:focus:shadow-none"
                       />
                     </div>
@@ -147,8 +173,12 @@ const Contact = () => {
                   <div className="w-full px-4">
                     <button
                       type="submit"
-                      disabled={isSubmitting}
-                      className="rounded-full bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark"
+                      disabled={isSubmitting || submitDisabled}
+                      className={`rounded-full px-9 py-4 text-base font-medium text-white shadow-submit duration-300 ${
+                        isSubmitting || submitDisabled
+                          ? "bg-gray-500 cursor-not-allowed"
+                          : "bg-primary hover:bg-primary/90"
+                      } dark:shadow-submit-dark`}
                     >
                       Enviar feedback
                     </button>

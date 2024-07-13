@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Form, Input, Button, InputNumber } from "antd";
+import { Modal, Form, Input, Button, InputNumber, message } from "antd";
 import { Producto } from "@/types/interfaces";
 import { IoLink } from "react-icons/io5";
 import { FaDollarSign } from "react-icons/fa";
@@ -17,16 +17,36 @@ const CreateProductModal: React.FC<CreateProductModalProps> = ({
   onSave,
 }) => {
   const [form] = Form.useForm();
-
   const [imageUrl, setImageUrl] = useState<string>("");
 
   const handleSubmit = async () => {
     try {
       await form.validateFields();
-      onSave(form.getFieldsValue() as Producto);
+      const productData = form.getFieldsValue() as Producto;
+
+      const response = await fetch("http://localhost:1338/admin/producto", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          name: productData.title,
+          price: productData.price,
+          imgpath: productData.url,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al crear el producto");
+      }
+
+      onSave(productData);
+      message.success("Producto creado correctamente");
       onClose();
-    } catch (errorInfo) {
-      console.error("Error validando campos:", errorInfo);
+    } catch (error: any) {
+      console.error("Error:", error.message);
+      message.error("Hubo un error al crear el producto");
     }
   };
 
@@ -86,7 +106,7 @@ const CreateProductModal: React.FC<CreateProductModalProps> = ({
             form={form}
             layout="vertical"
             onValuesChange={(_, allValues) => {
-              setImageUrl(allValues.url || ""); // Corrección aquí: eliminar la línea que reiniciaba el estado a una cadena vacía
+              setImageUrl(allValues.url || "");
             }}
           >
             <Form.Item

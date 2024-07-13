@@ -1,61 +1,59 @@
-import React from "react";
+"use client";
 import Link from "next/link";
-import SidebarDropdown from "@/components/Sidebar/SidebarDropdown";
+import { useState } from "react";
+import { MdArrowOutward, MdOutlineArrowForward } from "react-icons/md";
 
-const SidebarItem = ({ item, pageName, setPageName }: any) => {
-  const handleClick = () => {
-    const updatedPageName =
-      pageName !== item.label.toLowerCase() ? item.label.toLowerCase() : "";
-    return setPageName(updatedPageName);
+interface SidebarItemProps {
+  item: {
+    icon: JSX.Element;
+    label: string;
+    route: string;
+  };
+  pathname: string;
+  pageName: string;
+  setPageName: (arg: string) => void;
+}
+
+const SidebarItem = ({
+  item,
+  pathname,
+  pageName,
+  setPageName,
+}: SidebarItemProps) => {
+  const isActive = pathname === item.route;
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
   };
 
   return (
-    <>
-      <li>
-        <Link
-          href={item.route}
-          onClick={handleClick}
-          className={`${pageName === item.label.toLowerCase() ? "bg-primary/[.07] text-primary dark:bg-white/10 dark:text-white" : "text-dark-4 hover:bg-primary hover:text-white dark:text-gray-5 dark:hover:bg-white/10 dark:hover:text-white"} group relative flex items-center gap-3 rounded-[7px] px-3.5 py-3 font-medium duration-300 ease-in-out`}
+    <li>
+      <Link href={item.route}>
+        <div
+          className={`flex items-center rounded-3xl gap-3 px-4 py-2 text-base font-medium transition-colors duration-300 ease-in-out cursor-pointer relative ${
+            isActive
+              ? "bg-primary text-white"
+              : "text-dark hover:bg-gray-200 dark:text-white dark:hover:bg-gray-700"
+          }`}
+          onClick={() => setPageName(item.label)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {item.icon}
           {item.label}
-          {item.message && (
-            <span className="absolute right-11.5 top-1/2 -translate-y-1/2 rounded-full bg-red-light-6 px-1.5 py-px text-[10px] font-medium leading-[17px] text-red">
-              {item.message}
-            </span>
+          {isHovered && (
+            <div className="absolute text-lg right-4 transform rotate-25">
+              {isActive ? <MdOutlineArrowForward /> : <MdArrowOutward />}
+            </div>
           )}
-          {item.children && (
-            <svg
-              className={`absolute right-3.5 top-1/2 -translate-y-1/2 fill-current ${
-                pageName !== item.label.toLowerCase() && "rotate-180"
-              }`}
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M10.5525 7.72801C10.81 7.50733 11.1899 7.50733 11.4474 7.72801L17.864 13.228C18.1523 13.4751 18.1857 13.9091 17.9386 14.1974C17.6915 14.4857 17.2575 14.5191 16.9692 14.272L10.9999 9.15549L5.03068 14.272C4.7424 14.5191 4.30838 14.4857 4.06128 14.1974C3.81417 13.9091 3.84756 13.4751 4.13585 13.228L10.5525 7.72801Z"
-                fill=""
-              />
-            </svg>
-          )}
-        </Link>
-
-        {item.children && (
-          <div
-            className={`translate transform overflow-hidden ${
-              pageName !== item.label.toLowerCase() && "hidden"
-            }`}
-          >
-            <SidebarDropdown item={item.children} />
-          </div>
-        )}
-      </li>
-    </>
+        </div>
+      </Link>
+    </li>
   );
 };
 

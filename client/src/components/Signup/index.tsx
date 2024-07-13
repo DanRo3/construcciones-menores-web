@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import Link from "next/link";
 import { message } from "antd";
@@ -10,7 +9,7 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: 0,
+    phone: "",
     password: "",
     confirmPassword: "",
     termsAccepted: false,
@@ -45,46 +44,51 @@ const Signup = () => {
     }
   };
 
-  const handleSubmit = async (values: PedidoForm) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
     try {
-      const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-      const phoneNumber = parseInt(values.phone, 10); // Convertir a número entero
-
-      // Validar el número de teléfono
-      if (phoneNumber < 50000000 || phoneNumber > 63999999) {
-        message.error(
-          "El número de teléfono debe estar entre 50000000 y 63999999"
-        );
-        return;
-      }
-
+      const phoneNumber = `+53 ${formData.phone}`; // Formato del número de teléfono
       const requestBody = {
-        id_servico: modalData.id,
-        user_id: userData.id,
-        phone: values.phone.toString(),
-        municipio: values.municipio,
-        address_reference: values.descripcion,
-        fecha_inicio: values.dateRange[0].toISOString(),
-        fecha_culminacion: values.dateRange[1].toISOString(),
+        name: formData.name,
+        email: formData.email,
+        phone: phoneNumber,
+        password: formData.password,
       };
 
-      const response = await fetch("http://localhost:1338/user/pedido", {
+      const response = await fetch("http://localhost:1338/registro", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // Incluir cookies con la solicitud
         body: JSON.stringify(requestBody),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error("Failed to submit request");
+        const errorMessage = data.error
+          ? translateError(data.error)
+          : "Hubo un problema al crear la cuenta";
+        message.error(errorMessage);
+        return;
       }
 
-      message.success("Solicitud enviada exitosamente");
-      closeModal();
+      message.success("Cuenta creada exitosamente");
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+        termsAccepted: false,
+      });
+      setLoading(false);
+      router.push("/home/signin"); // Redirigir a la página de inicio de sesión
     } catch (error) {
-      message.error("Hubo un problema al enviar la solicitud");
+      message.error("Hubo un problema al crear la cuenta");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,9 +98,6 @@ const Signup = () => {
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="shadow-three mx-auto max-w-[500px] rounded bg-white px-6 py-10 dark:bg-dark sm:p-[60px]">
-              <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
-                Construcciones Menores
-              </h3>
               <h3 className="mb-3 text-center text-2xl font-bold text-black dark:text-white sm:text-3xl">
                 Crea tu cuenta
               </h3>
@@ -122,6 +123,7 @@ const Signup = () => {
                     placeholder="Escribe tu nombre"
                     value={formData.name}
                     onChange={handleChange}
+                    autoComplete="disable"
                     className="border-stroke dark:text-body-color-dark dark:shadow-two w-full rounded-sm border bg-[#f8f8f8] px-6 py-3 text-base text-body-color outline-none transition-all duration-300 focus:border-primary dark:border-transparent dark:bg-[#2C303B] dark:focus:border-primary dark:focus:shadow-none"
                   />
                 </div>

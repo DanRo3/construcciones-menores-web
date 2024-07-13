@@ -1,11 +1,12 @@
-import { Modal, Form, Input, Button, InputNumber } from "antd";
+import { Modal, Form, Input, InputNumber, Button, message } from "antd";
 import { User } from "@/types/interfaces";
+import { useEffect, useState } from "react";
 
 interface EditUserModalProps {
   visible: boolean;
   onClose: () => void;
   userData: User;
-  onSave: (data: User) => void;
+  onSave: (updatedUser: User) => void;
 }
 
 const EditUserModal: React.FC<EditUserModalProps> = ({
@@ -15,61 +16,87 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   onSave,
 }) => {
   const [form] = Form.useForm();
+  const [name, setName] = useState(userData.name);
+  const [email, setEmail] = useState(userData.email);
+  const [phone, setPhone] = useState(userData.phone);
 
-  const handleSubmit = async () => {
+  useEffect(() => {
+    setName(userData.name);
+    setEmail(userData.email);
+    setPhone(userData.phone);
+    form.resetFields();
+  }, []);
+
+  const handleSave = async () => {
     try {
       await form.validateFields();
-      onSave(form.getFieldsValue());
+      const updatedUser = { ...userData, name, email, phone };
+      const response = await fetch("http://localhost:1338/admin/updateUser", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+      }
+
+      onSave(updatedUser);
+      message.success("Usuario actualizado correctamente");
       onClose();
-    } catch (errorInfo) {
-      console.error("Error validando campos:", errorInfo);
+    } catch (error) {
+      message.error(`Error al actualizar usuario: ${error.message}`);
     }
+  };
+
+  const handleCancel = () => {
+    form.resetFields();
+    onClose();
   };
 
   return (
     <Modal
       title="Editar Usuario"
       visible={visible}
-      centered
-      onCancel={onClose}
+      onCancel={handleCancel}
       footer={[
-        <Button key="back" onClick={onClose}>
+        <Button key="back" onClick={handleCancel}>
           Cancelar
         </Button>,
-        <Button key="submit" type="primary" onClick={handleSubmit}>
+        <Button key="submit" type="primary" onClick={handleSave}>
           Guardar cambios
         </Button>,
       ]}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        initialValues={{
-          name: userData.name,
-          email: userData.email,
-          phoneNumber: userData.phoneNumber,
-        }}
-      >
+      <Form form={form} layout="vertical" initialValues={userData}>
         <Form.Item
           label="Nombre"
           name="name"
           rules={[{ required: true, message: "Por favor ingrese un nombre" }]}
         >
-          <Input size="large" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Form.Item>
         <Form.Item
           label="Correo"
           name="email"
-          rules={[{ required: true, message: "Por favor ingrese un email" }]}
+          rules={[{ required: true, message: "Por favor ingrese un correo" }]}
         >
-          <Input size="large" />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </Form.Item>
         <Form.Item
-          label="Numero de teléfono"
-          name="phoneNumber"
-          rules={[{ required: true, message: "Por favor ingrese un email" }]}
+          label="Teléfono"
+          name="phone"
+          rules={[{ required: true, message: "Por favor ingrese un teléfono" }]}
         >
-          <InputNumber size="large" className="!w-1/2" />
+          <InputNumber
+            style={{ width: "100%" }}
+            value={phone}
+            onChange={(value) => setPhone(value?.toString() || "")}
+          />
         </Form.Item>
       </Form>
     </Modal>

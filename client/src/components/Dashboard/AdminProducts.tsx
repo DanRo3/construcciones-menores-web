@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import ProductTable from "../Tables/ProductTable";
-import { Producto } from "@/types/interfaces"; // Asegúrate de importar los tipos de datos necesarios
+import { ProductoServer } from "@/types/interfaces"; // Asegúrate de importar los tipos de datos necesarios
 
 const AdminProducts = () => {
-  const [productos, setProductos] = useState<Producto[]>([]);
+  const [productos, setProductos] = useState<ProductoServer[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,7 +27,7 @@ const AdminProducts = () => {
 
     fetchProducts();
   }, []);
-
+  console.log(productos);
   return (
     <>
       <ProductTable products={productos} />

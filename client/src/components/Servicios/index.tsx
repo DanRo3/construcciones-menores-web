@@ -195,19 +195,22 @@ interface PedidoForm {
 const Servicios: React.FC = () => {
   const { isVisible, closeModal, modalData } = useModal();
   const [form] = useForm();
+  const [loading, setLoading] = useState(false); // Estado para manejar el estado de carga del botón
 
   const handleSubmit = async (values: PedidoForm) => {
+    setLoading(true); // Deshabilitar el botón de enviar
     try {
       const userData = JSON.parse(localStorage.getItem("userData") || "{}");
       if (!userData.id) {
         message.error("Usuario no autenticado");
+        setLoading(false); // Habilitar el botón de enviar
         return;
       }
 
       const requestBody = {
         id_servico: modalData.id,
         user_id: userData.id,
-        phone: values.phone.toString(), // Convertir el número de teléfono a cadena
+        phone: `+53${values.phone.toString()}`,
         municipio: values.municipio,
         address_reference: values.descripcion,
         fecha_inicio: values.dateRange[0].toISOString(),
@@ -222,9 +225,10 @@ const Servicios: React.FC = () => {
         credentials: "include",
         body: JSON.stringify(requestBody),
       });
-      console.log(response);
+
       if (response.ok) {
         message.success("Solicitud enviada exitosamente");
+        form.resetFields(); // Limpiar campos del formulario
         closeModal();
       } else {
         const errorData = await response.json();
@@ -233,10 +237,13 @@ const Servicios: React.FC = () => {
             errorData.message || "Hubo un problema al enviar la solicitud"
           }`
         );
+        console.error("Error de respuesta del servidor:", errorData);
       }
     } catch (error) {
       console.error("Error al enviar la solicitud:", error);
       message.error("Hubo un problema al enviar la solicitud");
+    } finally {
+      setLoading(false); // Habilitar el botón de enviar
     }
   };
 
@@ -330,11 +337,17 @@ const Servicios: React.FC = () => {
                 gap: "10px",
               }}
             >
-              <Button htmlType="submit" style={{ marginRight: "10px" }}>
+              <Button
+                htmlType="submit"
+                style={{ marginRight: "10px" }}
+                loading={loading} // Mostrar estado de carga en el botón
+              >
                 Enviar
               </Button>
 
-              <Button onClick={closeModal}>Cancelar</Button>
+              <Button onClick={closeModal} disabled={loading}>
+                Cancelar
+              </Button>
             </Form.Item>
           </Form>
         </Modal>

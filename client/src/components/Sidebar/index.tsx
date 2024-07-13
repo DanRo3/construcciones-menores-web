@@ -1,9 +1,7 @@
 "use client";
-
 import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import SidebarItem from "@/components/Sidebar/SidebarItem";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import ClickOutside from "../ClickOutside";
@@ -24,32 +22,32 @@ const menuGroups = [
     name: "Menú Principal",
     menuItems: [
       {
-        icon:<CgWebsite />,
+        icon: <CgWebsite />,
         label: "Dashboard",
         route: "/dashboard",
       },
       {
-        icon:<ShoppingOutlined />,
+        icon: <ShoppingOutlined />,
         label: "Pedidos",
         route: "/dashboard/pedidos",
       },
       {
-        icon:<GoBriefcase /> ,
+        icon: <GoBriefcase />,
         label: "Servicios",
         route: "/dashboard/servicios",
       },
       {
-        icon:<AiOutlineProduct /> ,
+        icon: <AiOutlineProduct />,
         label: "Productos",
         route: "/dashboard/productos",
       },
       {
-        icon:<VscFeedback /> ,
+        icon: <VscFeedback />,
         label: "Feedback",
         route: "/dashboard/feedback",
       },
       {
-        icon:<RiUserSettingsLine /> ,
+        icon: <RiUserSettingsLine />,
         label: "Usuarios",
         route: "/dashboard/usuarios",
       },
@@ -117,6 +115,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <SidebarItem
                       key={menuIndex}
                       item={menuItem}
+                      pathname={pathname}
                       pageName={pageName}
                       setPageName={setPageName}
                     />

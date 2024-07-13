@@ -1,16 +1,16 @@
+import React, { useEffect, useState } from "react";
 import { Modal, Form, Input, Button, InputNumber } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { ExtendedModalDataType, ProductoServer } from "@/types/interfaces";
-import TextArea from "antd/es/input/TextArea";
-import { useEffect, useState } from "react";
+import { ProductoServer } from "@/types/interfaces";
 import { FaDollarSign } from "react-icons/fa";
 import { IoLink } from "react-icons/io5";
+import { message } from "antd";
 
 interface EditProductModalProps {
   visible: boolean;
   onClose: () => void;
   productData: ProductoServer;
-  onSave: (data: any) => void;
+  onSave: (updatedProduct: ProductoServer) => void;
 }
 
 const EditProductModal: React.FC<EditProductModalProps> = ({
@@ -20,22 +20,33 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
   onSave,
 }) => {
   const [form] = Form.useForm<FormInstance>();
-
   const [imageUrl, setImageUrl] = useState<string>(productData.imgpath || "");
-
-  const handleSubmit = async () => {
-    try {
-      await form.validateFields();
-      onSave(form.getFieldsValue());
-      onClose();
-    } catch (errorInfo) {
-      console.error("Error validating fields:", errorInfo);
-    }
-  };
 
   useEffect(() => {
     setImageUrl(productData.imgpath || "");
-  }, [productData.imgpath]);
+    form.setFieldsValue({
+      title: productData.name,
+      price: productData.price,
+      url: productData.imgpath,
+    });
+  }, [productData]);
+
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      const updatedProduct: ProductoServer = {
+        ...productData,
+        name: values.title,
+        price: values.price,
+        imgpath: values.url,
+      };
+      onSave(updatedProduct);
+      message.success("Producto actualizado correctamente");
+      onClose();
+    } catch (errorInfo) {
+      console.error("Error al validar los campos:", errorInfo);
+    }
+  };
 
   return (
     <Modal
@@ -63,7 +74,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
               url: productData.imgpath,
             }}
             onValuesChange={(_, allValues) => {
-              setImageUrl(allValues.imgpath || "");
+              setImageUrl(allValues.url || "");
             }}
           >
             <Form.Item
@@ -88,47 +99,48 @@ const EditProductModal: React.FC<EditProductModalProps> = ({
                 },
               ]}
             >
-              <InputNumber size="large" addonBefore={<FaDollarSign />} />
+              <InputNumber
+                size="large"
+                style={{ width: "100%" }}
+                prefix={<FaDollarSign />}
+                min={0}
+                precision={2}
+              />
             </Form.Item>
           </Form>
         </div>
-
-        <div className="flex flex-col space-y-4">
-          <Form
-            form={form}
-            layout="vertical"
-            initialValues={{
-              url: productData.imgpath,
-            }}
-            onValuesChange={(_, allValues) => {
-              setImageUrl(allValues.url || "");
-            }}
-          >
+        <div>
+          <Form layout="vertical">
             <Form.Item
-              label="Imagen URL"
+              label="URL de la imagen"
               name="url"
+              initialValue={productData.imgpath}
               rules={[
                 {
                   required: true,
-                  message: "Por favor ingrese la URL de la imagen.",
+                  message: "Por favor ingrese una URL para la imagen",
                 },
               ]}
             >
-              <Input size="large" addonBefore={<IoLink />} />
+              <Input
+                size="large"
+                prefix={<IoLink />}
+                onChange={(e) => setImageUrl(e.target.value)}
+              />
             </Form.Item>
+            <div
+              className="w-full h-48 border border-gray-300 rounded-lg bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${imageUrl || ""})`,
+              }}
+            >
+              {!imageUrl && (
+                <div className="flex justify-center items-center h-full text-gray-400">
+                  Sin imagen
+                </div>
+              )}
+            </div>
           </Form>
-          <div
-            className="w-full h-48 border border-gray-300 rounded-lg bg-cover bg-center"
-            style={{
-              backgroundImage: `url(${imageUrl || ""})`,
-            }}
-          >
-            {!imageUrl && (
-              <div className="flex justify-center items-center h-full text-gray-400">
-                Sin imagen
-              </div>
-            )}
-          </div>
         </div>
       </div>
     </Modal>

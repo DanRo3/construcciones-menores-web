@@ -3,62 +3,28 @@ import {
   Table,
   Space,
   Button,
-  Tag,
   Modal,
   Input,
   Typography,
   Col,
   Row,
   Divider,
+  message,
 } from "antd";
 import { Feedback } from "@/types/interfaces";
 import { DeleteOutlined } from "@ant-design/icons";
 import { BsSendFill } from "react-icons/bs";
-import { format } from "date-fns"; // Importar la función format de date-fns
+import { format } from "date-fns";
 
-const columns = [
-  {
-    title: "Fecha",
-    dataIndex: "date",
-    key: "date",
-    sorter: (a: Feedback, b: Feedback) =>
-      new Date(a.date).getTime() - new Date(b.date).getTime(),
-    render: (date: string) => format(new Date(date), "dd/MM/yyyy HH:mm:ss"), // Formatear la fecha usando date-fns
-  },
-  {
-    title: "Nombre",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "email",
-  },
-  {
-    title: "Estado",
-    key: "actions",
-    render: (record: Feedback) => (
-      <Space size="middle">
-        <Tag color={record.isRead ? "green" : "red"}>
-          {record.isRead ? "Leído" : "No Leído"}
-        </Tag>
-      </Space>
-    ),
-  },
-];
-
-interface FeedbackListProps {
-  onSelect: (feedback: Feedback) => void;
-}
-
-const FeedbackList: React.FC<FeedbackListProps> = ({ onSelect }) => {
+const FeedbackList: React.FC<{ onSelect: (feedback: Feedback) => void }> = ({
+  onSelect,
+}) => {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
-  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(
     null
   );
   const [showResponseForm, setShowResponseForm] = useState<boolean>(false);
+  const [responseContent, setResponseContent] = useState<string>("");
 
   useEffect(() => {
     fetchFeedbacks();
@@ -77,54 +43,127 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ onSelect }) => {
         throw new Error("Error al obtener los feedbacks");
       }
       const data = await response.json();
-      setFeedbacks(data.feeds);
+      setFeedbacks(
+        data.feeds.map((feed: any) => ({
+          id: feed.id,
+          name: feed.user_name,
+          email: feed.email,
+          message: feed.message,
+          date: feed.created,
+        }))
+      );
     } catch (error) {
       console.error("Error al obtener feedbacks:", error.message);
     }
   };
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: (selectedKeys: string[]) => setSelectedRowKeys(selectedKeys),
-  };
-
-  const deleteSelected = () => {
-    console.log("Eliminar seleccionados");
-  };
-
-  const handleRowClick = (record: Feedback, rowIndex: number) => {
-    setSelectedFeedback(record);
+  const handleResponse = (feedback: Feedback) => {
+    setSelectedFeedback(feedback);
     setShowResponseForm(true);
   };
 
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(
+        "http://localhost:1338/admin/deleteFeedback",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ id }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el feedback");
+      }
+
+      // Actualizar la lista de feedbacks después de eliminar uno
+      setFeedbacks(feedbacks.filter((feedback) => feedback.id !== id));
+      console.log(`Eliminar feedback con ID: ${id}`);
+    } catch (error) {
+      console.error("Error al eliminar el feedback:", error.message);
+    }
+  };
+
+  const showDeleteConfirm = (id: number) => {
+    Modal.confirm({
+      title: "¿Estás seguro de que quieres eliminar este feedback?",
+      content: "Esta acción no se puede deshacer.",
+      okText: "Sí",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        handleDelete(id);
+      },
+      onCancel() {
+        console.log("Cancelado");
+      },
+    });
+  };
+
   const handleResponseSubmit = () => {
+    if (responseContent.trim() === "") {
+      message.error("No puedes enviar una respuesta vacía.");
+      return;
+    }
+
     console.log("Responder feedback:", selectedFeedback);
     setShowResponseForm(false);
+    message.success("Respuesta Enviada");
+    setResponseContent(""); // Limpiar el campo de respuesta después de enviar
   };
+
+  const columns = [
+    {
+      title: "Nombre",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+    },
+    {
+      title: "Mensaje",
+      dataIndex: "message",
+      key: "message",
+    },
+    {
+      title: "Acciones",
+      key: "actions",
+      render: (record: Feedback) => (
+        <Space size="middle">
+          <Button type="primary" onClick={() => handleResponse(record)}>
+            Responder
+          </Button>
+          <Button
+            danger
+            onClick={() => showDeleteConfirm(record.id)}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginBottom: "5px",
+            }}
+          >
+            <DeleteOutlined />
+          </Button>
+        </Space>
+      ),
+    },
+  ];
 
   return (
     <div>
-      <Button
-        danger
-        onClick={deleteSelected}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginBottom: "5px",
-        }}
-      >
-        <DeleteOutlined />
-      </Button>
       <Table
         rowKey="id"
-        rowSelection={rowSelection}
         columns={columns}
         dataSource={feedbacks}
         pagination={false}
-        onRow={(record, rowIndex) => ({
-          onClick: () => handleRowClick(record, rowIndex),
-        })}
       />
       {selectedFeedback && (
         <Modal
@@ -132,12 +171,14 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ onSelect }) => {
           onCancel={() => setShowResponseForm(false)}
           footer={[
             <Button
-              key={12}
+              key="submit"
               type="primary"
               icon={<BsSendFill />}
               onClick={handleResponseSubmit}
-            ></Button>,
-            <Button key={13} onClick={() => setShowResponseForm(false)}>
+            >
+              Enviar respuesta
+            </Button>,
+            <Button key="cancel" onClick={() => setShowResponseForm(false)}>
               Cancelar
             </Button>,
           ]}
@@ -161,7 +202,11 @@ const FeedbackList: React.FC<FeedbackListProps> = ({ onSelect }) => {
             </Col>
             <Divider plain>Respuesta</Divider>
             <Col span={24}>
-              <Input.TextArea placeholder="Escribe tu respuesta aquí..." />
+              <Input.TextArea
+                placeholder="Escribe tu respuesta aquí..."
+                value={responseContent}
+                onChange={(e) => setResponseContent(e.target.value)}
+              />
             </Col>
           </Row>
         </Modal>

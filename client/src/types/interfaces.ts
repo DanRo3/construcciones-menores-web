@@ -8,14 +8,16 @@ export interface CardProps {
   }
 }
 
+// Cambia la interfaz Feedback en '@/types/interfaces' a:
 export interface Feedback {
   id: number;
-  name: string;
+  name: string; // Cambiar a user_name si deseas reflejar el cambio en el backend
   email: string;
-  content: string;
-  isNew: boolean;
-  isRead: boolean;
-  date: string,
+  message: string; // Cambiar a content si deseas reflejar el cambio en el backend
+  created: string; // Cambiar a date si deseas reflejar el cambio en el backend
+  // Añadir cualquier otro campo necesario
+  isNew?: boolean;
+  isRead?: boolean;
 }
 
 export interface Producto {
@@ -67,13 +69,13 @@ export interface PedidoForm {
   dateRange: [Date | null, Date | null];
 }
 
+
 export interface User {
   id: number;
   name: string;
   email: string;
-  profileImage?: string;
-  phoneNumber?: number;
-  rol:string;
+  phone: string;
+  role: string;
 }
 
 type GenericModalData<T extends object> = T;
